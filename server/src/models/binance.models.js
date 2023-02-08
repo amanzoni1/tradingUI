@@ -11,7 +11,7 @@ const binanceFuture = new ccxt.pro.binanceusdm({
     'adjustForTimeDifference': true,
   } 
 });
-//binanceFuture.setSandboxMode(true);
+binanceFuture.setSandboxMode(true);
 
 async function loadMarkets() { 
   const markets = await binanceFuture.loadMarkets();
