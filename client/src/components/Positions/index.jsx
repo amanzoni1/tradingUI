@@ -2,132 +2,14 @@ import usePosition from '../../hooks/usePositions';
 import useClosePosition from '../../hooks/useClosePosition';
 import config from '../../config';
 import { ChartComponent } from '../ChartComponent';
-import useSocketSymbols from '../../hooks/useSocketSymbols';
 
-const Positions = (props) => {
+const Positions = () => {
   const { data: positions, isLoading, refetch } = usePosition();
   const { closePosition } = useClosePosition();
-  const { trade } = useSocketSymbols();
-
-  console.log("Trade", trade[4])
-
-  const current = new Date();
-  const date = `0${current.getDate()}/0${current.getMonth()+1}/${current.getFullYear()}`;
-  console.log("date: ", date)
-
-  const date1 = `0${current.getDate() + 1}/0${current.getMonth()+1}/${current.getFullYear()}`;
-  console.log("date: ", date1)
-
-  const date2 = `${current.getDate() + 2}/0${current.getMonth()+1}/${current.getFullYear()}`;
-  console.log("date: ", date2)
-
-  const date3 = `0${current.getDate() - 1}/0${current.getMonth()+1}/${current.getFullYear()}`;
-  console.log("date: ", date3)
-
-  const date4 = `0${current.getDate() - 2}/0${current.getMonth()+1}/${current.getFullYear()}`;
-  console.log("date: ", date4)
-
-  const date5 = `0${current.getDate() - 3}/0${current.getMonth()+1}/${current.getFullYear()}`;
-  console.log("date: ", date5)
-
-  const date6 = `0${current.getDate() - 4}/0${current.getMonth()+1}/${current.getFullYear()}`;
-  console.log("date: ", date6)
-
-  const date7 = `0${current.getDate() - 5}/0${current.getMonth()+1}/${current.getFullYear()}`;
-  console.log("date: ", date7)
-
-  const date8 = `0${current.getDate() - 6}/0${current.getMonth()+1}/${current.getFullYear()}`;
-  console.log("date: ", date8)
-
-  const date9 = `0${current.getDate() - 7}/0${current.getMonth()+1}/${current.getFullYear()}`;
-  console.log("date: ", date9)
-
-  const initialData = [
-    {
-      time: `${date9}`,
-      open: `${trade[0]}`,
-      high: `${trade[1]}`,
-      low: `${trade[2]}`,
-      close: `${trade[3]}`,
-    },
-    {
-      time: `${date8}`,
-      open: `${trade[0]}`,
-      high: `${trade[1]}`,
-      low: `${trade[2]}`,
-      close: `${trade[3]}`,
-    },
-    {
-      time: `${date7}`,
-      open: `${trade[0]}`,
-      high: `${trade[1]}`,
-      low: `${trade[2]}`,
-      close: `${trade[3]}`,
-    },
-    {
-      time: `${date6}`,
-      open: `${trade[0]}`,
-      high: `${trade[1]}`,
-      low: `${trade[2]}`,
-      close: `${trade[3]}`,
-    },
-    {
-      time: `${date5}`,
-      open: `${trade[0]}`,
-      high: `${trade[1]}`,
-      low: `${trade[2]}`,
-      close: `${trade[3]}`,
-    },
-    {
-      time: `${date4}`,
-      open: `${trade[0]}`,
-      high: `${trade[1]}`,
-      low: `${trade[2]}`,
-      close: `${trade[3]}`,
-    },
-    {
-      time: `${date3}`,
-      open: `${trade[0]}`,
-      high: `${trade[1]}`,
-      low: `${trade[2]}`,
-      close: `${trade[3]}`,
-    },
-    {
-      time: `${date}`,
-      open: `${trade[0]}`,
-      high: `${trade[1]}`,
-      low: `${trade[2]}`,
-      close: `${trade[3]}`,
-    },
-    {
-      time: `${date1}`,
-      open: `${trade[0]}`,
-      high: `${trade[1]}`,
-      low: `${trade[2]}`,
-      close: `${trade[3]}`,
-    },
-    {
-      time: `${date2}`,
-      open: `${trade[0]}`,
-      high: `${trade[1]}`,
-      low: `${trade[2]}`,
-      close: `${trade[3]}`,
-    },
-  ];
-
-  const results = [];
-
-  initialData.forEach((initialDatas) =>{
-    results.push(
-        initialDatas
-    );
-  })
-
-
 
   return (
     <>
-      <button className="refetch-button" onClick={() => refetch()}>
+      <button className="refetch-button" onClick={refetch}>
         &#8634;
       </button>
       <div className="list-wrapper">
@@ -143,7 +25,6 @@ const Positions = (props) => {
               <div>Close</div>
             </div>
             {positions.map((position, index) => {
-              console.log(position, 'in arr');
               return (
                 <div key={index} className="container">
                   <div>
@@ -198,7 +79,7 @@ const Positions = (props) => {
                 </div>
               );
             })}
-            <ChartComponent {...props} data={results}/>
+            <ChartComponent/>
           </>
         ) : null}
       </div>

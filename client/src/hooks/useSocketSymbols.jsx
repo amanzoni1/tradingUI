@@ -3,7 +3,7 @@ import useWebSocket from 'react-use-websocket';
 import config from '../config';
 
 const useSocketSymbols = () => {
-  const [trade, setTrade] = useState([]);
+  const [trade, setTrade] = useState({});
 
   const { lastMessage } = useWebSocket(config.wsUri1, {
     shouldReconnect: (closeEvent) => false,
@@ -16,11 +16,18 @@ const useSocketSymbols = () => {
     if (lastMessage) {
       const message = JSON.parse(lastMessage?.data);
       console.log("Message", message)
+        const time =  message.k.t;
         const open = message.k.o;
         const close = message.k.c;
         const high = message.k.h;
         const low = message.k.l;
-        const array = [open, high, low, close, message];
+      const array = {time,
+          open,
+          close,
+          high,
+          low
+      }
+
         setTrade(array)
     }
   }, [lastMessage]);

@@ -12,6 +12,7 @@ const config = {
   },
   binLinkPRD: 'http://binance.com/en/futures/',
   binLinkTest: 'https://testnet.binancefuture.com/en/futures/',
+  binanceChart: 'https://testnet.binancefuture.com/fapi/v1/continuousKlines?limit=9&pair=BTCUSDT&contractType=PERPETUAL&interval=1m',
 };
 
 export default config;
