@@ -21,7 +21,6 @@ const Bags = () => {
             <div>Close</div>
           </div>
           {bags.map((bag, index) => {
-            console.log(bag, 'in arr');
             return (
               <div key={index} className="container">
                 <p> eventual img </p>

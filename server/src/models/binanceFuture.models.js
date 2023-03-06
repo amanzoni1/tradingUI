@@ -68,7 +68,7 @@ async function createNewOrder(orderParams) {
         try {
           const order = await binanceFuture.createOrder(symbol, type , side, amountCoin, price, { timeInForce: 'IOC' });
           if (order.status === 'closed') {
-            const stopPrice = order.average * 0.992;
+            const stopPrice = order.average * 0.98;
             const sl = await binanceFuture.createOrder(symbol, 'market' , 'sell', amountCoin, stopPrice, { stopPrice: stopPrice });
           }
           return order; 
@@ -83,7 +83,7 @@ async function createNewOrder(orderParams) {
         try {
           const order = await binanceFuture.createOrder(symbol, type , side, amountCoin, price, { timeInForce: 'IOC' });
           if (order.status === 'closed') {
-            const stopPrice = order.average * 1.008;
+            const stopPrice = order.average * 1.02;
             const sl = await binanceFuture.createOrder(symbol, 'market' , 'buy', amountCoin, stopPrice, { stopPrice: stopPrice });
           }
           return order; 
@@ -99,7 +99,7 @@ async function createNewOrder(orderParams) {
         const amountCoin = amount / tickArr[objIndex].last;
         try {
           const order = await binanceFuture.createOrder(symbol, type, side, amountCoin);
-          const stopPrice = order.average * 0.992;
+          const stopPrice = order.average * 0.98;
           const sl = await binanceFuture.createOrder(symbol, 'market' , 'sell', amountCoin, stopPrice, { stopPrice: stopPrice });
           return order; 
         } catch (e) {
@@ -111,7 +111,7 @@ async function createNewOrder(orderParams) {
         const amountCoin = amount / tickArr[objIndex].last;
         try {
           const order = await binanceFuture.createOrder(symbol, type, side, amountCoin);
-          const stopPrice = order.average * 1.008;
+          const stopPrice = order.average * 1.02;
           const sl = await binanceFuture.createOrder(symbol, 'market' , 'buy', amountCoin, stopPrice, { stopPrice: stopPrice });
           return order;
         } catch (e) {

@@ -40,7 +40,7 @@ const TradingPair = ({ onChange, selectSymbol }) => {
               } else { openErrorSnackbar('This coin does not exist in your symbol selection'); }
             }}
           >
-            {coin}
+            {coin.replace(/\/USDT/gi, '')}
           </button>
         );
       })}

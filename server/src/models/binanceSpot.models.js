@@ -78,7 +78,7 @@ function getAllSymbols() {
 async function createSpotOrder(orderParams) {
   try{
     const { symbol, type, side, amount } = orderParams;
-    const size = amount < 15000 ? amount : 15000;
+    const size = amount < 13000 ? amount : 13000;
     const transfer = await binance.sapi_post_futures_transfer({
       'asset': 'USDT',
       'amount': size,
@@ -150,7 +150,7 @@ async function getOpenBags() {
       if (openBags[coin] !== 0 && coin != 'USDT' && coin != 'ETF') {  
         const symb = coin + '/USDT';
         const objIndex = tickArr.findIndex((e => e.symbol == symb));
-        const price = tickArr[objIndex].last || 0;
+        const price = tickArr[objIndex] ? tickArr[objIndex]?.last : 0;
         const bagsValue = (openBags[coin] * price).toFixed(2);
         bags.coin = coin;
         bags.quantity = openBags[coin];
