@@ -78,7 +78,7 @@ function getAllSymbols() {
 async function createSpotOrder(orderParams) {
   try{
     const { symbol, type, side, amount } = orderParams;
-    const size = amount < 13000 ? amount : 13000;
+    const size = amount < 12000 ? amount : 12000;
     const transfer = await binance.sapi_post_futures_transfer({
       'asset': 'USDT',
       'amount': size,

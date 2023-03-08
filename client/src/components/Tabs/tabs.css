@@ -5,7 +5,7 @@
   margin: 6px 4px 0px 4px;
 }
 
-.tab button {
+.tab-button {
   background-color: inherit;
   font-family: 'Open Sans Condensed', sans-serif;
   text-align: center;
@@ -19,13 +19,18 @@
   color: white;
 }
 
-.tab button:hover {
+.tab-button:hover {
   color: #29f1ff;
 }
 
-.tab button.active {
+.tab-button.active {
   color: #29f1ff;
   border: solid;
   border-color: #29f1ff;
+}
+
+.content {
+  margin: 70px 0 10px;
+  color: white;
 }
 

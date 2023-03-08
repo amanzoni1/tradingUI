@@ -14,6 +14,7 @@ const getRequestFetcher = (url, init) => {
 };
 
 export const useGetRequest = (url, requestConfig) => useSWR(config.apiEndpoint + url, getRequestFetcher, requestConfig);
+export const useAllGraphsRequest = (url) => useSWR(config.binanceChart + url, getRequestFetcher);
 
 const createPostOrPutFetcher = (requestMethod) => {
   return async (url, { arg }) => {

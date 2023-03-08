@@ -11,6 +11,7 @@ const config = {
   binFutureLinkPRD: 'https://binance.com/en/futures/',
   binSpotLinkPRD: 'https://www.binance.com/en/trade/',
   binLinkTest: 'https://testnet.binancefuture.com/en/futures/',
+  binanceChart: 'https://api.binance.com/api/v1/klines?',
 };
 
 export default config;

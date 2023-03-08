@@ -5,8 +5,6 @@ import config from './config';
 import Symbols from './components/Symbols';
 import OrderType from './components/OrderType';
 import Amount from './components/Amount';
-import Bags from './components/Bags';
-import Positions from './components/Positions';
 import ReLoader from './components/ReLoader';
 import Tabs from './components/Tabs/tabs';
 import CreateOrder from './components/CreateOrder';
@@ -47,8 +45,6 @@ const App = () => {
 
         <ReLoader />
         <Tabs />
-        <Positions />
-        <Bags />
       </div>
     </SWRConfig>
   );

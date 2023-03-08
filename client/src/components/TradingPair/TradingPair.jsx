@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import useSocket from '../../hooks/useSocket';
+import useSocket from '../../hooks/useNewsTerminal';
 import useSymbols from '../../hooks/useSymbols';
 import useSnackbar from '../../hooks/useSnackbar';
 
