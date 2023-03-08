@@ -90,8 +90,16 @@ const ChartComponent = (props) => {
     newSeries.setData(formattedChartData);
     newSeries.applyOptions({
       priceFormat: {
-        precision: formattedChartData[0].value > 1 ? 2 : 8,
-        minMove: formattedChartData[0].value > 1 ? 0.01 : 0.00000001,
+        precision: formattedChartData[0].value >= 100 ? 2
+                  : formattedChartData[0].value >= 10 ? 3  
+                  : formattedChartData[0].value >= 1 ? 4
+                  : formattedChartData[0].value >= 0.1 ? 5 
+                  : 6,
+        minMove: formattedChartData[0].value >= 100 ? 0.01 
+                : formattedChartData[0].value >= 10 ? 0.001
+                : formattedChartData[0].value >= 1 ? 0.0001
+                : formattedChartData[0].value >= 0.1 ? 0.00001 
+                : 0.000001,
       },
     });
     chart.timeScale().fitContent();

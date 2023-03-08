@@ -14,7 +14,7 @@ const useChartUpdates = (selectedSymbol, interval) => {
   useEffect(() => {
     if (lastMessage) {
       const message = JSON.parse(lastMessage?.data);
-      const time = (message.k.t /1000) + 3600;
+      const time = message.k.t / 1000 + 3600;
       const value = Number(message.k.l);
 
       setTrade({ time, value });

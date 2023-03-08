@@ -87,7 +87,7 @@ const Positions = () => {
               })}
             </>
           ) : (
-            <div className="no-positions">No Positions</div>
+            <div className="no-positions">No Open Positions</div>
           )}
         </>
       ) : null}

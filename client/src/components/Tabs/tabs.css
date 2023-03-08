@@ -23,10 +23,13 @@
   color: #29f1ff;
 }
 
-.tab-button.active {
+.active1 {
   color: #29f1ff;
-  border: solid;
-  border-color: #29f1ff;
+}
+
+.border {
+  background-color: inherit;
+  border-bottom: 1px solid rgb(136, 9, 9);
 }
 
 .content {

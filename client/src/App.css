@@ -259,11 +259,10 @@ p {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border: 1px solid rgb(56, 56, 56);
   border-radius: 6px;
-  font-size: 18px;
-  color: rgb(255, 255, 255);
-  margin: 10px 4px 0px 4px;
+  font-size: 16px;
+  color: rgb(170, 170, 170);
+  margin: 6px 4px 14px 4px;
 }
 
 .container {
@@ -274,9 +273,10 @@ p {
   align-items: center;
   border-bottom: 1px solid rgb(56, 56, 56);
   padding-bottom: 6px;
-  font-size: 20px;
+  font-size: 18px;
+  font-weight: 500;
   color: rgb(255, 255, 255);
-  margin: 10px 10px 0px 10px;
+  margin: 6px 10px 0px 10px;
 }
 
 .pnl {
@@ -296,16 +296,16 @@ p {
 }
 
 .green-circle {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   border-radius: 6px;
   background-color: rgb(14, 203, 129);
   margin: 0 auto;
 }
 
 .red-circle {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   border-radius: 6px;
   background-color: rgb(246, 70, 93);
   margin: 0 auto;
@@ -319,7 +319,7 @@ p {
   border-style: solid;
   border-radius: 6px;
   border-color: rgb(56, 56, 56);
-  font-size: 18px;
+  font-size: 16px;
   transition: opacity 0.15s;
   width: 45px;
   justify-self: center;
@@ -344,7 +344,7 @@ p {
   background-color: transparent;
   color: white;
   cursor: pointer;
-  padding: 12px 4px;
+  padding: 10px 4px;
   transition: opacity 0.15s;
   border-radius: 6px;
   border-color: rgb(56, 56, 56);

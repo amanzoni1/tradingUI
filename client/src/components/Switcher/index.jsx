@@ -9,10 +9,16 @@ function Switcher(props) {
 
   return (
     <div className="switcher">
-      <div className={`switcher-item ${interval === '1s' ? 'active' : 'switcher-item'}`} onClick={() => setInterval(options.OneSec)}>
+      <div 
+        className={`switcher-item ${interval === '1s' ? 'active' : ''}`} 
+        onClick={() => setInterval(options.OneSec)}
+      >
         1s
       </div>
-      <div className={`switcher-item ${interval === '1m' ? 'active' : ''}`} onClick={() => setInterval(options.OneMin)}>
+      <div 
+        className={`switcher-item ${interval === '1m' ? 'active' : ''}`} 
+        onClick={() => setInterval(options.OneMin)}
+      >
         1m
       </div>
     </div>
