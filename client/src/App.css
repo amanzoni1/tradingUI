@@ -25,32 +25,43 @@ p {
 }
 
 .mainview {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .optionside {
   min-width: 400px;
 }
 
+.options-tab {
+  border: 1px;
+  border-radius: 6px;
+  border-style: solid;
+  border-color: rgb(56, 56, 56);
+  margin: 0px 2px 0px 4px;
+}
+
 .graphside {
+  flex: 1;
+  height: 516px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   border: 1px;
   border-radius: 6px;
   border-style: solid;
   border-color: rgb(56, 56, 56);
-  margin: 4px;
+  margin: 0px 4px 0px 2px;
 }
 
 .main-graph-component {
   color: white;
-  width: 92%;
+  width: 98%;
   height: 98%;
   border-radius: 6px;
   border-color: rgb(56, 56, 56);
-  margin-top: 20px;
+  margin-left: 10px;
 }
 
 .contenitore {
@@ -102,6 +113,13 @@ p {
   border-radius: 6px;
   border-style: solid;
   border-color: rgb(56, 56, 56);
+}
+
+.blocco-symbols,
+.blocco-trading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .selection {
@@ -167,10 +185,10 @@ p {
 }
 
 .input-amount {
-  margin-top: 32px;
   width: 42px;
-  margin-left: 35px;
+  margin-bottom: 44px;
 }
+
 /* caselle opzioni */
 .option-type {
   display: flex;
@@ -211,15 +229,15 @@ p {
 .buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin-top: 30px;
-  margin-bottom: 28px;
+  margin-top: 22px;
+  margin-bottom: 4px;
   height: 82px;
 }
 
 .long {
   background-color: rgb(14, 203, 129);
   cursor: pointer;
-  margin-left: 8px;
+  margin-left: 4px;
   margin-right: 4px;
   border-style: none;
   border-radius: 6px;
@@ -233,7 +251,7 @@ p {
   background-color: rgb(246, 70, 93);
   cursor: pointer;
   margin-left: 4px;
-  margin-right: 8px;
+  margin-right: 4px;
   border-style: none;
   border-radius: 6px;
   color: white;
@@ -262,7 +280,7 @@ p {
   border-radius: 6px;
   font-size: 16px;
   color: rgb(170, 170, 170);
-  margin: 6px 4px 14px 4px;
+  margin: 2px 4px 14px 4px;
 }
 
 .container {
@@ -360,6 +378,7 @@ p {
 }
 
 .refetch-button {
+  float: right;
   padding: 2px;
   cursor: pointer;
   align-items: flex-end;
@@ -368,8 +387,7 @@ p {
   border-radius: 6px;
   background-color: #1e1d1d;
   border: 1px solid rgb(104, 104, 104);
-  margin-bottom: 8px;
-  margin-top: 16px;
+  margin: 15px 46px 6px 0px;
 }
 
 .switcher {
@@ -400,4 +418,12 @@ p {
 .active {
   text-decoration: none;
   background-color: grey;
+}
+
+.second-line-big-view {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
 }

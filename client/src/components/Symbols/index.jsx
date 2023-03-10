@@ -2,7 +2,7 @@ import SymbolsDropdown from './SymbolsDropdown';
 import useFutureSymbols from '../../hooks/useFutureSymbols';
 import config from '../../config';
 
-const Symbols = ({ onChange, selectedSymbol }) => {
+const Symbols = ({ onChange, selectedSymbol, onChangeAm }) => {
   const { data: futSymbols } = useFutureSymbols();
 
   const isCoinExistInFutureSymbols = selectedSymbol ? futSymbols.find(e => e.label === selectedSymbol.label) : '';
@@ -12,7 +12,7 @@ const Symbols = ({ onChange, selectedSymbol }) => {
 
 
   return (
-    <div className="blocco symbols">
+    <div className="blocco-symbols">
       <div className="selection-wrapper">
         <div className="selectionSy" id="symbol" name="symbol">
           {selectedSymbol ? selectedSymbol.label : 'symbol'}
@@ -37,6 +37,11 @@ const Symbols = ({ onChange, selectedSymbol }) => {
       <div className="basic">
         <SymbolsDropdown onChange={onChange} selected={selectedSymbol} />
       </div>
+      <input 
+        className="input-amount"
+        type="number" 
+        onChange={(event) => onChangeAm(event?.target?.value * 1000)} 
+      />
     </div>
   );
 };

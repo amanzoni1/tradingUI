@@ -1,10 +1,19 @@
+import { useEffect } from 'react';
 import useSellBags from '../../hooks/useSellBags';
 import useBags from '../../hooks/useBags';
 import config from '../../config';
 
 const Bags = () => {
-  const { data: bags, isLoading } = useBags();
+  const { data: bags, isLoading, refetch, mutate } = useBags();
   const { sellBags } = useSellBags();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [mutate]);  
   
   return (
     <>

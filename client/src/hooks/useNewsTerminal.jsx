@@ -7,7 +7,7 @@ const useSocket = () => {
   const [coins, setCoins] = useState('');
   const { data: symbols } = useSymbols();
 
-  const { lastMessage } = useWebSocket(config.wsUri, {
+  const { sendMessage, lastMessage } = useWebSocket(config.wsUri, {
     shouldReconnect: (closeEvent) => true,
     reconnectAttempts: 100,
     reconnectInterval: 3000,

@@ -3,14 +3,14 @@ import useSocket from '../../hooks/useNewsTerminal';
 import useSymbols from '../../hooks/useSymbols';
 import useSnackbar from '../../hooks/useSnackbar';
 
-const TradingPair = ({ onChange, selectSymbol }) => {
+const TradingPair = ({ selectSymbol }) => {
   const { coins } = useSocket();
   const { data: symbols } = useSymbols();
   const { openErrorSnackbar } = useSnackbar();
-  const [selectedCoins, setSelectedCoins] = useState(['', '']);
+  const [selectedCoins, setSelectedCoins] = useState(['', '', '', '', '']);
 
   useEffect(() => {
-    setSelectedCoins((prevState) => [coins, prevState[0], prevState[1]]);
+    setSelectedCoins((prevState) => [coins, prevState[0], prevState[1], prevState[2], prevState[3]]);
   }, [coins]);
 
   const isCoinExistInSymbols = (coin) =>
@@ -24,7 +24,7 @@ const TradingPair = ({ onChange, selectSymbol }) => {
   
 
   return (
-    <div className="blocco trading">
+    <div className="blocco-trading">
       {selectedCoins.map((coin, index) => {
         return (
           <button
@@ -44,12 +44,6 @@ const TradingPair = ({ onChange, selectSymbol }) => {
           </button>
         );
       })}
-
-      <input 
-        className="input-amount"
-        type="number" 
-        onChange={(event) => onChange(event?.target?.value * 1000)} 
-      />
     </div>
   );
 };

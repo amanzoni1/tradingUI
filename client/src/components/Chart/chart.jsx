@@ -74,7 +74,7 @@ const ChartComponent = (props) => {
         rightBarStaysOnScroll: true,
       },
       width: chartContainerRef.current.clientWidth,
-      height: 350,
+      height: 430,
     });
 
     setChartInitialize(chart);
@@ -115,10 +115,8 @@ const ChartComponent = (props) => {
 
   return (
     <>
-      <div>
         <Switcher interval={interval || '1s'} setInterval={setInterval} />
         <div ref={chartContainerRef} />
-      </div>
     </>
   );
 };
