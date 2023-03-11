@@ -7,7 +7,7 @@
   overflow: hidden;
   border: 1px solid rgb(56, 56, 56);
   border-radius: 6px;
-  margin: 0px 2px 0px 4px;
+  margin: 0px 2px 0px 6px;
 }
 
 .container-leg {
@@ -37,7 +37,7 @@
 }
 
 .content {
-  margin-top: 40px;
+  margin-top: 8px;
   color: white;
 }
 

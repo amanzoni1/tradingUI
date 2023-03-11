@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createChart } from 'lightweight-charts';
 import useChartHistory from '../../hooks/useChartHystory';
 import useChartUpdates from '../../hooks/useChartUpdates';
-import Switcher from '../Switcher';
+import Switcher from '../Switcher/switcher';
+import './chart.css'
 
 const ChartComponent = (props) => {
 	const {
@@ -74,7 +75,7 @@ const ChartComponent = (props) => {
         rightBarStaysOnScroll: true,
       },
       width: chartContainerRef.current.clientWidth,
-      height: 430,
+      height: 516,
     });
 
     setChartInitialize(chart);
@@ -115,8 +116,10 @@ const ChartComponent = (props) => {
 
   return (
     <>
-        <Switcher interval={interval || '1s'} setInterval={setInterval} />
-        <div ref={chartContainerRef} />
+      <div className='main-graph-component'>
+        <Switcher interval={interval || '1s'} setInterval={setInterval} selectedSymbol={selectedSymbol} />
+        {interval === '1s' ? <div ref={chartContainerRef} /> : <div ref={chartContainerRef} />}
+      </div>
     </>
   );
 };

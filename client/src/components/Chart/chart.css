@@ -1,0 +1,9 @@
+.main-graph-component {
+  color: white;
+  width: 98%;
+  height: 100%;
+  border-color: rgb(56, 56, 56);
+  margin-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

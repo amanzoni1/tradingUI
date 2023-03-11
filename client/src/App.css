@@ -17,18 +17,12 @@ p {
   margin: 0px;
 }
 
-.app-title {
-  margin-top: 16px;
-  margin-bottom: 16px;
-  font-size: 20px;
-  color: grey;
-}
-
 .mainview {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-top: 16px;
 }
 
 .optionside {
@@ -40,7 +34,7 @@ p {
   border-radius: 6px;
   border-style: solid;
   border-color: rgb(56, 56, 56);
-  margin: 0px 2px 0px 4px;
+  margin: 0px 2px 0px 6px;
 }
 
 .graphside {
@@ -52,16 +46,7 @@ p {
   border-radius: 6px;
   border-style: solid;
   border-color: rgb(56, 56, 56);
-  margin: 0px 4px 0px 2px;
-}
-
-.main-graph-component {
-  color: white;
-  width: 98%;
-  height: 98%;
-  border-radius: 6px;
-  border-color: rgb(56, 56, 56);
-  margin-left: 10px;
+  margin: 0px 6px 0px 2px;
 }
 
 .contenitore {
@@ -388,36 +373,6 @@ p {
   background-color: #1e1d1d;
   border: 1px solid rgb(104, 104, 104);
   margin: 15px 46px 6px 0px;
-}
-
-.switcher {
-  display: flex;
-  align-items: center;
-  height: 30px;
-  width: max-content;
-  margin-top: 8px;
-  padding: 4px;
-  border: 1px solid grey;
-  border-radius: 10px;
-}
-
-.switcher-item {
-  cursor: default;
-  font-size: 14px;
-  color: white;
-  background-color: transparent;
-  padding: 6px;
-  margin: 2px;
-  border-radius: 4px;
-}
-
-.switcher-item:hover {
-  background-color: grey;
-}
-
-.active {
-  text-decoration: none;
-  background-color: grey;
 }
 
 .second-line-big-view {

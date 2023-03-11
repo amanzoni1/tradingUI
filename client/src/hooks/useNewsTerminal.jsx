@@ -21,6 +21,8 @@ const useSocket = () => {
     symbols.find((symbol) => symbol.label === newCoin);
   }
 
+ 
+
   useEffect(() => {
     if (lastMessage) {
       const message = JSON.parse(lastMessage?.data);

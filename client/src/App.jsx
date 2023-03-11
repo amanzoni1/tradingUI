@@ -22,8 +22,6 @@ const App = () => {
   return (
     <SWRConfig value={config.swr}>
       <div className="App">
-        <h1 className="app-title"> MENU </h1>
-
         <div className='mainview'>
           <div className='optionside'>
             <AccountInfo />
@@ -40,12 +38,9 @@ const App = () => {
             </div>
           </div>
           <div className='graphside'>
-            <div className='main-graph-component'>
-              <ChartComponent selectedSymbol={selectedSymbol}></ChartComponent>
-            </div>
+            <ChartComponent selectedSymbol={selectedSymbol}></ChartComponent>
           </div>
-        </div>
-        
+        </div> 
         <div className='second-line-big-view'>
           <Tabs />
           <BoxTicker />

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import useWebSocket from 'react-use-websocket';
 
-const useChartUpdates = (selectedSymbol, interval) => {
-  const [trade, setTrade] = useState({});
+const useTicker = (selectedSymbol) => {
+  const [price, setPrice] = useState('');
   const symbSocket = selectedSymbol ? selectedSymbol.label.replace(/[^a-z]/gi, '').toLowerCase() : 'btcusdt';
-  const { lastMessage } = useWebSocket(`wss://stream.binance.com:9443/ws/${symbSocket}@kline_${interval}`, {
+  const { lastMessage } = useWebSocket(`wss://stream.binance.com:9443/ws/${symbSocket}@ticker`, {
     shouldReconnect: (closeEvent) => false,
     reconnectAttempts: 0,
     reconnectInterval: 30,
@@ -14,14 +14,13 @@ const useChartUpdates = (selectedSymbol, interval) => {
   useEffect(() => {
     if (lastMessage) {
       const message = JSON.parse(lastMessage?.data);
-      const time = message.k.t / 1000 + 3600;
-      const value = Number(message.k.c);
+      const price = Number(message.c);
 
-      setTrade({ time, value });
+      setPrice(price);
     }
   }, [lastMessage]);
 
-  return { trade };
+  return { price };
 };
 
-export default useChartUpdates;
+export default useTicker;

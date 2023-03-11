@@ -1,0 +1,42 @@
+.switcher {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  height: 24px;
+  width: max-content;
+  margin-top: 26px;
+  margin-left: 16px;
+  padding: 4px;
+  border: 1px solid grey;
+  border-radius: 10px;
+  z-index: 1000;
+}
+
+.switcher-item {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  background-color: transparent;
+  padding: 6px 7px;
+  margin: 2px;
+  border-radius: 6px;
+}
+
+.switcher-item:hover {
+  color: #29f1ff;
+}
+
+.active {
+  color: #29f1ff;
+}
+
+.legend{
+  position: absolute;
+  margin-top: 66px;
+  margin-left: 36px;
+  font-size: 28px;
+  font-weight: bold;
+  z-index: 1000;
+}
