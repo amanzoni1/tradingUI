@@ -9,7 +9,7 @@ const OrderType = ({ type, onChange }) => {
           market
         </button>
         <button className="button-opt" onClick={() => onChange(ORDER_TYPE.LIMIT)}>
-          limit
+          limitUP
         </button>
       </div>
     </div>

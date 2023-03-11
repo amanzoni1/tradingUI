@@ -21,7 +21,9 @@ const useSocket = () => {
     symbols.find((symbol) => symbol.label === newCoin);
   }
 
- 
+  useEffect(() => {
+    sendMessage('login 842752f3f9b8271110aa50829407762f536b8a34e43661db7f3e3ff4cb8ca772');
+  }, []);
 
   useEffect(() => {
     if (lastMessage) {
