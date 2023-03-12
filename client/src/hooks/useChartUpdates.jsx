@@ -1,11 +1,20 @@
 import { useState, useEffect } from 'react';
 import useWebSocket from 'react-use-websocket';
+import config from '../config';
+//import useFutureSymbols from './useFutureSymbols';
+
 
 const useChartUpdates = (selectedSymbol, interval) => {
   const [line, setLine] = useState({});
   const [candle, setCandle] = useState({});
+  const [volume, setVolume] = useState({});
+  //const { data: futSymbols } = useFutureSymbols();
   const symbSocket = selectedSymbol ? selectedSymbol.label.replace(/[^a-z]/gi, '').toLowerCase() : 'btcusdt';
-  const { lastMessage } = useWebSocket(`wss://stream.binance.com:9443/ws/${symbSocket}@kline_${interval}`, {
+
+  //const isCoinExistInFutureSymbols = selectedSymbol ? futSymbols.find(e => e.label === selectedSymbol.label) : '';
+  //const binApi = isCoinExistInFutureSymbols ? config.binanceFutSocket : config.binanceSocket;
+
+  const { lastMessage } = useWebSocket(config.binanceSocket + `${symbSocket}@kline_${interval}`, {
     shouldReconnect: (closeEvent) => false,
     reconnectAttempts: 0,
     reconnectInterval: 30,
@@ -35,7 +44,17 @@ const useChartUpdates = (selectedSymbol, interval) => {
     }
   }, [lastMessage]);
 
-  return { line, candle };
+  useEffect(() => {
+    if (lastMessage) {
+      const message = JSON.parse(lastMessage?.data);
+      const time = message.k.t / 1000 + 3600;
+      const value = Number(message.k.q);
+
+      setVolume({ time, value });
+    }
+  }, [lastMessage]);
+
+  return { line, candle, volume };
 };
 
 export default useChartUpdates;

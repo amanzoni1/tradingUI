@@ -5,8 +5,8 @@
   cursor: pointer;
   height: 24px;
   width: max-content;
-  margin-top: 26px;
-  margin-left: 16px;
+  margin-top: 28px;
+  margin-left: 18px;
   padding: 4px;
   border: 1px solid grey;
   border-radius: 10px;
@@ -34,8 +34,8 @@
 
 .legend{
   position: absolute;
-  margin-top: 66px;
-  margin-left: 36px;
+  margin-top: 68px;
+  margin-left: 44px;
   font-size: 28px;
   font-weight: bold;
   z-index: 1000;

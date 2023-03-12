@@ -24,10 +24,11 @@ const ChartComponent = (props) => {
 	} = props;
 
 	const chartContainerRef = useRef();
-  const [interval, setInterval] = useState('1s');
+  const [interval, setInterval] = useState('1m');
   const { chartData } = useChartHistory(selectedSymbol, interval);
-  const { line, candle } = useChartUpdates(selectedSymbol, interval);
+  const { line, candle, volume } = useChartUpdates(selectedSymbol, interval);
   const [results, setResults] = useState([]);
+  const [volResult, setVolResult] = useState([]);
   const [chartInstance, setChartInstance] = useState({});
   const [chartInitialize, setChartInitialize] = useState({});
 
@@ -53,14 +54,18 @@ const ChartComponent = (props) => {
       });
     }
   }, [line, candle]);
-  
+
 
   const newChartData = () => {
-    return chartData.map((cart) => ({ time: cart[0] / 1000 + 3600, value: Number(cart[1]) }));
+    return chartData.map((cart) => ({ time: cart[0] / 1000 + 3600, value: Number(cart[4]) }));
   };
 
   const newChartDataCandle = () => {
     return chartData.map((cart) => ({ time: cart[0] / 1000 + 3600, open: Number(cart[1]), high: Number(cart[2]), low: Number(cart[3]), close: Number(cart[4]) }));
+  };
+
+  const newVolData = () => {
+    return chartData.map((cart) => ({ time: cart[0] / 1000 + 3600, value: Number(cart[7]) }));
   };
 
   useEffect(() => {
@@ -83,7 +88,7 @@ const ChartComponent = (props) => {
         },
         grid: {
           vertLines: {
-            visible: false,
+            color: 'rgba(42, 46, 57, 0.5)',
           },
           horzLines: {
             color: 'rgba(42, 46, 57, 0.5)',
@@ -149,6 +154,9 @@ const ChartComponent = (props) => {
       const formattedChartData = newChartDataCandle();
       setResults((prevState) => [...prevState, ...chartData]);
 
+      const formattedVolData = newVolData();
+      setVolResult((prevState) => [...prevState, ...chartData]);
+
       const handleResize = () => {
         chart.applyOptions({ width: chartContainerRef.current.clientWidth });
       };
@@ -160,7 +168,7 @@ const ChartComponent = (props) => {
         },
         grid: {
           vertLines: {
-            visible: false,
+            color: 'rgba(42, 46, 57, 0.5)',
           },
           horzLines: {
             color: 'rgba(42, 46, 57, 0.5)',
@@ -168,6 +176,10 @@ const ChartComponent = (props) => {
         },
         rightPriceScale: {
           borderVisible: false,
+          scaleMargins: {
+		      top: 0.2,
+		      bottom: 0.1,
+	      },
         },
         timeScale: {
           borderVisible: false,
@@ -191,11 +203,27 @@ const ChartComponent = (props) => {
         wickUpColor,
         wickDownColor,
         borderUpColor,
-        borderDownColor
+        borderDownColor,
       });
       setChartInstance(newSeries);
 
+      /*
+      const volumeSeries = chart.addHistogramSeries({
+	      color: '#26a69a',
+	      priceFormat: {
+		      type: 'volume',
+	      },
+        priceScaleId: '',
+	      scaleMargins: {
+		      top: 0.8,
+		      bottom: 0,
+	      },
+      });
+      */
+
       newSeries.setData(formattedChartData);
+      //volumeSeries.setData(formattedVolData);
+
       newSeries.applyOptions({
         priceFormat: {
           precision: formattedChartData[0].open >= 100 ? 2
@@ -212,6 +240,8 @@ const ChartComponent = (props) => {
         priceLineVisible: false,
         crosshairMarkerVisible: false,
       });
+
+
       chart.timeScale().fitContent();
 
       window.addEventListener('resize', handleResize);
