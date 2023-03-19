@@ -3,7 +3,7 @@ import { ORDER_SIDE_CLOSE } from '../constants';
 import usePositions from './usePositions';
 import useSnackbar from './useSnackbar';
 
-function useOrders() {
+function useMakeOrders() {
   const { data, error, trigger, reset, isMutating } = usePostRequest('/orders');
   const { refetch: refetchPositions } = usePositions();
   const { openSnackbar, openErrorSnackbar } = useSnackbar();
@@ -51,4 +51,4 @@ function useOrders() {
   };
 }
 
-export default useOrders;
+export default useMakeOrders;

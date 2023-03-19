@@ -6,7 +6,7 @@ const config = {
   binSpotLinkPRD: 'https://www.binance.com/en/trade/',
   binLinkTest: 'https://testnet.binancefuture.com/en/futures/',
   binanceApi: 'https://api.binance.com/api/',
-  binanceFutApi: 'https://api.binance.com/fapi/',
+  binanceFutApi: 'https://fapi.binance.com/fapi/',
   binanceSocket: 'wss://stream.binance.com:9443/ws/',
   binanceFutSocket: 'wss://fstream.binance.com/ws/',
   smallReduce: 0.2,

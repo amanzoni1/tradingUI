@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createChart } from 'lightweight-charts';
 import useChartHistory from '../../hooks/useChartHystory';
 import useChartUpdates from '../../hooks/useChartUpdates';
+import useChartPositions from '../../hooks/useChartPositions';
 import Switcher from '../Switcher/switcher';
 import './chart.css'
 
@@ -27,12 +28,14 @@ const ChartComponent = (props) => {
   const [interval, setInterval] = useState('1m');
   const { chartData } = useChartHistory(selectedSymbol, interval);
   const { line, candle, volume } = useChartUpdates(selectedSymbol, interval);
+  const  { positionLine } = useChartPositions(selectedSymbol);
   const [results, setResults] = useState([]);
-  const [volResult, setVolResult] = useState([]);
+  //const [volResult, setVolResult] = useState([]);
   const [chartInstance, setChartInstance] = useState({});
   const [chartInitialize, setChartInitialize] = useState({});
 
-  
+
+
 	useEffect(() => {
     if (interval === '1s') {
       if (!line?.time) {
@@ -64,54 +67,58 @@ const ChartComponent = (props) => {
     return chartData.map((cart) => ({ time: cart[0] / 1000 + 3600, open: Number(cart[1]), high: Number(cart[2]), low: Number(cart[3]), close: Number(cart[4]) }));
   };
 
+  /*
   const newVolData = () => {
     return chartData.map((cart) => ({ time: cart[0] / 1000 + 3600, value: Number(cart[7]) }));
   };
+  */
 
   useEffect(() => {
-    if (interval === '1s') {
-      if (!chartData || !chartData[0]) {
-        return;
-      }
 
+    if (!chartData || !chartData[0]) {
+      return;
+    }
+
+    const handleResize = () => {
+      chart.applyOptions({ width: chartContainerRef.current.clientWidth });
+    };
+
+    const chart = createChart(chartContainerRef.current, {
+      layout: {
+        background,
+        textColor,
+        lineColor,
+      },
+      grid: {
+        vertLines: {
+          color: 'rgba(42, 46, 57, 0.5)',
+         },
+        horzLines: {
+          color: 'rgba(42, 46, 57, 0.5)',
+        },
+      },
+      rightPriceScale: {
+        borderVisible: false,
+      },
+      timeScale: {
+        borderVisible: false,
+        timeVisible: true,
+        secondsVisible: true,
+        rightBarStaysOnScroll: true,
+        fixLeftEdge: true,
+      },
+      crosshair: {
+        mode: 0,
+      },
+      width: chartContainerRef.current.clientWidth,
+      height: 516,
+    });
+
+    setChartInitialize(chart);
+
+    if (interval === '1s') {
       const formattedChartData = newChartData();
       setResults((prevState) => [...prevState, ...chartData]);
-
-      const handleResize = () => {
-        chart.applyOptions({ width: chartContainerRef.current.clientWidth });
-      };
-      const chart = createChart(chartContainerRef.current, {
-        layout: {
-          background,
-          textColor,
-          lineColor,
-        },
-        grid: {
-          vertLines: {
-            color: 'rgba(42, 46, 57, 0.5)',
-          },
-          horzLines: {
-            color: 'rgba(42, 46, 57, 0.5)',
-          },
-        },
-        rightPriceScale: {
-          borderVisible: false,
-        },
-        timeScale: {
-          borderVisible: false,
-          timeVisible: true,
-          secondsVisible: true,
-          rightBarStaysOnScroll: true,
-          fixLeftEdge: true,
-        },
-        crosshair: {
-          mode: 0,
-        },
-        width: chartContainerRef.current.clientWidth,
-        height: 516,
-      });
-
-      setChartInitialize(chart);
 
       const newSeries = chart.addAreaSeries({
         lineColor,
@@ -138,64 +145,15 @@ const ChartComponent = (props) => {
         priceLineVisible: false,
         crosshairMarkerVisible: false,
       });
-      chart.timeScale().fitContent();
 
-      window.addEventListener('resize', handleResize);
-
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        chart.remove();
-      };
-    } else {
-      if (!chartData || !chartData[0]) {
-        return;
+      if(positionLine) {
+        newSeries.createPriceLine(positionLine);
       }
-
+      
+      
+    } else {
       const formattedChartData = newChartDataCandle();
       setResults((prevState) => [...prevState, ...chartData]);
-
-      const formattedVolData = newVolData();
-      setVolResult((prevState) => [...prevState, ...chartData]);
-
-      const handleResize = () => {
-        chart.applyOptions({ width: chartContainerRef.current.clientWidth });
-      };
-      const chart = createChart(chartContainerRef.current, {
-        layout: {
-          background,
-          textColor,
-          lineColor,
-        },
-        grid: {
-          vertLines: {
-            color: 'rgba(42, 46, 57, 0.5)',
-          },
-          horzLines: {
-            color: 'rgba(42, 46, 57, 0.5)',
-          },
-        },
-        rightPriceScale: {
-          borderVisible: false,
-          scaleMargins: {
-		      top: 0.2,
-		      bottom: 0.1,
-	      },
-        },
-        timeScale: {
-          borderVisible: false,
-          timeVisible: true,
-          secondsVisible: true,
-          rightBarStaysOnScroll: true,
-          fixLeftEdge: true,
-        },
-        crosshair: {
-          mode: 0,
-        },
-        width: chartContainerRef.current.clientWidth,
-        height: 516,
-      });
-
-      setChartInitialize(chart);
 
       const newSeries = chart.addCandlestickSeries({
         upColor,
@@ -207,23 +165,7 @@ const ChartComponent = (props) => {
       });
       setChartInstance(newSeries);
 
-      /*
-      const volumeSeries = chart.addHistogramSeries({
-	      color: '#26a69a',
-	      priceFormat: {
-		      type: 'volume',
-	      },
-        priceScaleId: '',
-	      scaleMargins: {
-		      top: 0.8,
-		      bottom: 0,
-	      },
-      });
-      */
-
       newSeries.setData(formattedChartData);
-      //volumeSeries.setData(formattedVolData);
-
       newSeries.applyOptions({
         priceFormat: {
           precision: formattedChartData[0].open >= 100 ? 2
@@ -241,16 +183,19 @@ const ChartComponent = (props) => {
         crosshairMarkerVisible: false,
       });
 
-
-      chart.timeScale().fitContent();
-
-      window.addEventListener('resize', handleResize);
-
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        chart.remove();
-      };
+      
+      if(positionLine) {
+        newSeries.createPriceLine(positionLine);
+      }
     }
+
+    chart.timeScale().fitContent();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      chart.remove();
+    };
   }, [chartData]);
 
   return (
@@ -265,3 +210,21 @@ const ChartComponent = (props) => {
 
 export default ChartComponent;
 
+
+ /*
+      const formattedVolData = newVolData();
+      setVolResults((prevState) => [...prevState, ...chartData]);
+
+    const volumeSeries = chart.addHistogramSeries({
+	      color: '#26a69a',
+	      priceFormat: {
+		      type: 'volume',
+	      },
+        priceScaleId: '',
+	      scaleMargins: {
+		      top: 0.8,
+		      bottom: 0,
+	      },
+      });
+      volumeSeries.setData(formattedVolData);
+      */

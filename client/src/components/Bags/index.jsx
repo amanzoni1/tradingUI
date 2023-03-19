@@ -4,23 +4,23 @@ import useBags from '../../hooks/useBags';
 import config from '../../config';
 
 const Bags = () => {
-  const { data: bags, isLoading, refetch, mutate } = useBags();
+  const { data: bags, isLoading, refetch } = useBags();
   const { sellBags } = useSellBags();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      refetch();
+    setTimeout(() => {
+      if (bags?.length > 0) {
+        refetch();
+      }
     }, 1000);
+  }, [bags]);
 
-    return () => clearInterval(interval);
-  }, [mutate]);  
-  
   return (
     <>
       <div className="list-wrapper">
         {!isLoading ? (
           <>
-            {bags.length > 0 ? (
+            {bags?.length > 0 ? (
               <>
                 <div className="ordini">
                   <div>Entry Price</div>

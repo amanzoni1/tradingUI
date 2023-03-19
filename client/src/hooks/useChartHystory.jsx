@@ -1,23 +1,24 @@
 import { useBinanceRequest, useBinanceFutRequest } from './requests';
-//import useFutureSymbols from './useFutureSymbols';
+import useFutureSymbols from './useFutureSymbols';
 
 
 const useChartHistory = (selectedSymbol, interval) => {
-  //const { data: futSymbols } = useFutureSymbols();
+  const { data: futSymbols } = useFutureSymbols();
 
   const symFetch = selectedSymbol ? selectedSymbol.label.replace(/[^a-z]/gi, '') : 'BTCUSDT';
-  //const isCoinExistInFutureSymbols = selectedSymbol ? futSymbols.find(e => e.label === selectedSymbol.label) : '';
-  //const binApi = isCoinExistInFutureSymbols ? useBinanceFutRequest : useBinanceRequest;
-
   const urlParams = `v1/klines?symbol=${symFetch}&interval=${interval}`;
-  const { data, error, isLoading, mutate } = useBinanceRequest(urlParams);
 
-  return {
-    chartData: data,
-    error,
-    chartIsLoading: isLoading,
-    mutate,
-  };
+  const isCoinExistInFutureSymbols = selectedSymbol ? futSymbols.find(e => e.label === selectedSymbol.label) : '';
+  const binApi = isCoinExistInFutureSymbols ? 'future' : 'spot';
+
+  const { data: spotData } = useBinanceRequest(urlParams);
+  const { data: futData } = useBinanceRequest(urlParams);
+
+  if (binApi === 'future') {
+    return { chartData: futData };
+  } else {
+    return { chartData: spotData };
+  }
 };
 
 export default useChartHistory;

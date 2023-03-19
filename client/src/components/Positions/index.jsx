@@ -6,23 +6,23 @@ import usePosition from '../../hooks/usePositions';
 import config from '../../config';
 
 const Positions = () => {
-  const { data: positions, isLoading, refetch, mutate } = usePosition();
+  const { data: positions, isLoading, refetch } = usePosition();
   const { closePosition } = useClosePosition();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      refetch();
+    setTimeout(() => {
+      if (positions?.length > 0) {
+        refetch();
+      }
     }, 1000);
-
-    return () => clearInterval(interval);
-  }, [mutate]);
+  }, [positions]);
 
   return (
     <>
       <div className="list-wrapper">
       {!isLoading ? (
         <>
-          {positions.length > 0 ? (
+          {positions?.length > 0 ? (
             <>
               <div className="ordini">
                 <div>Side</div>

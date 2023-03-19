@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import useSocket from '../../hooks/useNewsTerminal';
+import useNewsTerminal from '../../hooks/useNewsTerminal';
 import useSymbols from '../../hooks/useSymbols';
 import useSnackbar from '../../hooks/useSnackbar';
 
 const TradingPair = ({ selectSymbol }) => {
-  const { coins } = useSocket();
+  const { coins } = useNewsTerminal();
   const { data: symbols } = useSymbols();
   const { openErrorSnackbar } = useSnackbar();
   const [selectedCoins, setSelectedCoins] = useState(['', '', '', '', '']);
@@ -14,7 +14,7 @@ const TradingPair = ({ selectSymbol }) => {
   }, [coins]);
 
   const isCoinExistInSymbols = (coin) =>
-    !!symbols.find((symbol) => symbol.label.replace(/[^a-z0-9]/gi, '') === coin.replace(/[^a-z0-9]/gi, ''));
+    symbols.find((symbol) => symbol.label === coin);
 
   const coinWithOthersQuoteCurr = (coin) => {
     const newCoin = coin.replace(/USDT/gi, 'BUSD');
@@ -40,7 +40,7 @@ const TradingPair = ({ selectSymbol }) => {
               } else { openErrorSnackbar('This coin does not exist in your symbol selection'); }
             }}
           >
-            {coin.replace(/\/USDT/gi, '')}
+            {coin.replace(/\/USDT|\/BUSD/gi, '')}
           </button>
         );
       })}

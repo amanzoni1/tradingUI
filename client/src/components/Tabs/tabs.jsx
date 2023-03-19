@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './tabs.css';
 import Positions from '../Positions';
 import Bags from '../Bags';
-import usePosition from '../../hooks/usePositions';
+import usePositions from '../../hooks/usePositions';
 import useBags from '../../hooks/useBags';
 import ReLoader from '../ReLoader';
 
@@ -14,7 +14,7 @@ const tabNames = {
 
 const Tabs = () => {
   const [tabName, setTabName] = useState('Positions');
-  const { data: positions } = usePosition();
+  const { data: positions } = usePositions();
   const { data: bags } = useBags();
 
   const handleTabChange = (event) => setTabName(event.target.value);

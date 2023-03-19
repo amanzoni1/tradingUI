@@ -1,7 +1,7 @@
-import useOrders from '../../hooks/useOrders';
+import useMakeOrders from "../../hooks/useMakeOrders";
 
 const CreateOrder = ({ selectedSymbol, orderType, amount }) => {
-  const { createLongOrder, createShortOrder } = useOrders();
+  const { createLongOrder, createShortOrder } = useMakeOrders();
 
   // Event handles
   const handleLongClick = () => createLongOrder(selectedSymbol, orderType, amount);
