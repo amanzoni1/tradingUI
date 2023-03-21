@@ -1,6 +1,9 @@
+const axios = require('axios');
 const ccxt = require ('ccxt');
 require('dotenv').config();
 
+const baseURL = 'https://fapi.binance.com';
+const endpoint = '/fapi/v1/ping';
 
 const binanceFuture = new ccxt.pro.binanceusdm({
   //'rateLimit': 1000,
@@ -18,7 +21,17 @@ async function loadFutureMarkets() {
   let ids = binanceFuture.ids;
   console.log(`${ids.length} future markets found!`);
   loadTickers();
+  keepBinanceFutAlive();
   return markets;
+}
+
+function keepBinanceFutAlive() {
+  setInterval(() => {
+    axios.get(`${baseURL}${endpoint}`)
+      .catch((error) => {
+        console.log(error.cause);
+      });
+  }, 1000*15)
 }
 
 async function loadTickers() {

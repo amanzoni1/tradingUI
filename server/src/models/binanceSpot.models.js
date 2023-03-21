@@ -1,6 +1,9 @@
+const axios = require('axios');
 const ccxt = require ('ccxt');
 require('dotenv').config();
 
+const baseURL = 'https://api.binance.com';
+const endpoint = '/api/v3/ping';
 
 const binance = new ccxt.pro.binanceusdm({
   //'rateLimit': 1000,
@@ -20,8 +23,19 @@ async function loadSpotMarkets() {
   let ids = binance.ids;
   console.log(`${ids.length} spot markets found!`);
   loadTickers();
+  keepBinanceSpotAlive();
   return markets;
 }
+
+function keepBinanceSpotAlive() {
+  setInterval(() => {
+    axios.get(`${baseURL}${endpoint}`)
+      //.then(r => console.log(`Ping  spot successful at ${new Date().toISOString()}`))
+      .catch((error) => {
+        console.log(error.cause);
+      });
+  }, 1000*15)
+} 
 
 async function loadTickers() {
   let symbols = binance.symbols;
@@ -78,7 +92,7 @@ function getAllSymbols() {
 async function createSpotOrder(orderParams) {
   try{
     const { symbol, type, side, amount } = orderParams;
-    const size = amount < 12000 ? amount : 12000;
+    const size = amount < 11000 ? amount : 11000;
     const transfer = await binance.sapi_post_futures_transfer({
       'asset': 'USDT',
       'amount': size,

@@ -1,7 +1,7 @@
 .tab {
   flex: 1;
   display: flex;
-  display: flex;
+  height: 180px;
   flex-direction: column;
   overflow: hidden;
   border: 1px solid rgb(56, 56, 56);

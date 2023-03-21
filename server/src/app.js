@@ -3,7 +3,6 @@ const morgan = require('morgan');
 const path = require('path');
 const cors = require('cors');
 
-const connectionsRouter = require('./routes/connections/connections.router');
 const positionRouter = require('./routes/position/position.router');
 const marketsRouter = require('./routes/markets/markets.router');
 const orderRouter = require('./routes/orders/orders.router');
@@ -15,7 +14,6 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.use('/connections', connectionsRouter);
 app.use('/position', positionRouter);
 app.use('/markets', marketsRouter);
 app.use('/orders', orderRouter);
