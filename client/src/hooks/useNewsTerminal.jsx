@@ -49,7 +49,7 @@ const useNewsTerminal = () => {
           let coinEx = '[^A-Za-z0-9_]' + coin + '[^A-Za-z0-9_]';
           let regex = new RegExp(coinEx, 'gi'); 
           if (message?.title?.match(regex) || message?.body?.match(regex)) {
-            if(coin != 'T' && coin !='FOR') {
+            if(coin !== 'T' && coin !== 'FOR') {
               const coinSy = coin + '/USDT';
               setCoins(coinSy);
             }
@@ -59,7 +59,7 @@ const useNewsTerminal = () => {
               let coinEx = '[^A-Za-z0-9_]' + coin + '[^A-Za-z0-9_]';
               let regex = new RegExp(coinEx, 'gi'); 
                 if (message?.title?.match(regex) || message?.body?.match(regex)) {
-                  if(coin != 'T' && coin !='FOR') {
+                  if(coin !== 'T' && coin !== 'FOR') {
                     const coinSy = coin + '/USDT';
                     setCoins(coinSy);
                   }

@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
 import useWebSocket from 'react-use-websocket';
 import config from '../config';
-//import useFutureSymbols from './useFutureSymbols';
+import useFutureSymbols from './useFutureSymbols';
 
 
 const useChartUpdates = (selectedSymbol, interval) => {
   const [line, setLine] = useState({});
   const [candle, setCandle] = useState({});
   const [volume, setVolume] = useState({});
-  //const { data: futSymbols } = useFutureSymbols();
+  const { data: futSymbols } = useFutureSymbols();
   const symbSocket = selectedSymbol ? selectedSymbol.label.replace(/[^a-z]/gi, '').toLowerCase() : 'btcusdt';
 
-  //const isCoinExistInFutureSymbols = selectedSymbol ? futSymbols.find(e => e.label === selectedSymbol.label) : '';
-  //const binApi = isCoinExistInFutureSymbols ? config.binanceFutSocket : config.binanceSocket;
+  const isCoinExistInFutureSymbols = selectedSymbol ? futSymbols.find(e => e.label === selectedSymbol.label) : '';
+  const binApi = isCoinExistInFutureSymbols ? config.binanceFutSocket : config.binanceSocket;
 
-  const { lastMessage } = useWebSocket(config.binanceSocket + `${symbSocket}@kline_${interval}`, {
+  const { lastMessage } = useWebSocket(binApi + `${symbSocket}@kline_${interval}`, {
     shouldReconnect: (closeEvent) => false,
     reconnectAttempts: 0,
     reconnectInterval: 30,

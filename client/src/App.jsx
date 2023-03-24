@@ -43,7 +43,7 @@ const App = () => {
         </div> 
         <div className='second-line-big-view'>
           <Tabs />
-          <BoxTicker />
+          <BoxTicker selectedSymbol={selectedSymbol}/>
         </div>
       </div>
     </SWRConfig>
