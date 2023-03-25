@@ -16,13 +16,33 @@ const Ticker = ({ selectedSymbol }) => {
     }
     return (
       <div className='box-ticker'>
-        <p>  - Binance Future </p>
-        <p>24h change: {tickerData.priceChange}/{tickerData.priceChangePercent}%</p>
-        <p>24h volume(USDT): {tickerData.quoteVolume}</p>
-        <p>Funding rate: {fundingRate}%</p>
-        <p>Open interest: {openInterest}</p>
-        <p>long/short ratio: {longShortRatio}</p>
-        <p>Top trader long/short ratio: {topTLSRatio}</p>
+        <div className='bt-title'>
+          <p className='bt-coin'>{selectedSymbol?.label}</p> <p className='bt-mark'>Future</p>
+        </div>
+        <div className='bt-info'>
+          <div className='bt-info-title'>
+            <p>Open interest:</p>
+            <p>Funding rate:</p>
+            <p>24h change:</p>
+            <p>24h volume(USDT):</p>
+            <p>Long/Short ratio:</p>
+            <p>TopTrader l/s ratio:</p>
+          </div>
+          <div className='bt-info-value'>
+            <p>{openInterest}</p>
+            <p className='bt-fr'>{fundingRate*100}%</p>
+            <div>
+              {tickerData.priceChange > 0 ? (
+                <p className='bt-pc-green'>{tickerData.priceChange} / {tickerData.priceChangePercent}%</p>
+              ) : (
+                <p className='bt-pc-red'>{tickerData.priceChange} / {tickerData.priceChangePercent}%</p>
+              )}
+            </div>
+            <p>{tickerData.quoteVolume}</p>
+            <p>{longShortRatio}</p>
+            <p>{topTLSRatio}</p>      
+          </div>
+        </div>
       </div>
     );
   } else {
@@ -31,11 +51,29 @@ const Ticker = ({ selectedSymbol }) => {
     }
     return (
       <div className='box-ticker'>
-        <p>  - Binance Spot </p>
-        <p>24h change: {tickerData.priceChange}/{tickerData.priceChangePercent}%</p>
-        <p>24h High: {tickerData.highPrice}</p>
-        <p>24h Low: {tickerData.lowPrice}</p>
-        <p>24h volume(USDT): {tickerData.quoteVolume}</p>
+        <div className='bt-title'>
+          <p className='bt-coin'>{selectedSymbol?.label}</p> <p className='bt-mark'>Spot</p>
+        </div>
+        <div className='bt-info'>
+          <div className='bt-info-title-spot'>
+            <p>24h change:</p>
+            <p>24h High:</p>
+            <p>24h Low:</p>
+            <p>24h volume(USDT):</p>
+          </div>
+          <div className='bt-info-value-spot'>
+            <div>
+              {tickerData.priceChange > 0 ? (
+                <p className='bt-pc-green'>{tickerData.priceChange} / {tickerData.priceChangePercent}%</p>
+              ) : (
+                <p className='bt-pc-red'>{tickerData.priceChange} / {tickerData.priceChangePercent}%</p>
+              )}
+            </div>
+            <p>{tickerData.highPrice}</p>
+            <p>{tickerData.lowPrice}</p>
+            <p>{tickerData.quoteVolume}</p>      
+          </div>
+        </div>
       </div>
     );
   }

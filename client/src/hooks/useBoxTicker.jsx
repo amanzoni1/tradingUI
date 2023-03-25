@@ -20,10 +20,10 @@ const useBoxTicker = (selectedSymbol) => {
           const response = await fetch(`https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=${symbSocket}`);
           const data = await response.json();
           setTickerData({
-            priceChange: data.priceChange,
-            priceChangePercent: data.priceChangePercent,
-            volume: data.volume,
-            quoteVolume: data.quoteVolume,
+            priceChange: Number(data.priceChange),
+            priceChangePercent: Number(data.priceChangePercent).toFixed(2),
+            volume: Number(data.volume).toLocaleString('en-US', {style: 'currency', currency: 'USD'}),
+            quoteVolume: Number(data.quoteVolume).toLocaleString('en-US', {style: 'currency', currency: 'USD'}),
           });
         } catch (error) {
           console.error(error);
@@ -34,7 +34,7 @@ const useBoxTicker = (selectedSymbol) => {
         try {
           const response = await fetch(`https://fapi.binance.com/fapi/v1/fundingRate?symbol=${symbSocket}`);
           const data = await response.json();
-          setFundingRate(data[99]['fundingRate']);
+          setFundingRate(Number(data[99]['fundingRate']));
         } catch (error) {
           console.error(error);
         }
@@ -44,7 +44,7 @@ const useBoxTicker = (selectedSymbol) => {
         try {
           const response = await fetch(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${symbSocket}`);
           const data = await response.json();
-          setOpenInterest(data.openInterest);
+          setOpenInterest(Number(data.openInterest).toLocaleString('en-US', {style: 'currency', currency: 'USD'}));
         } catch (error) {
           console.error(error);
         }
@@ -52,9 +52,9 @@ const useBoxTicker = (selectedSymbol) => {
 
       const fetchTTLSRatio = async () => {
         try {
-          const response = await fetch(`https://fapi.binance.com/futures/data/topLongShortPositionRatio?symbol=${symbSocket}&period=1h`);
+          const response = await fetch(`https://fapi.binance.com/futures/data/topLongShortPositionRatio?symbol=${symbSocket}&period=6h`);
           const data = await response.json();
-          setTopTLSRatio(data[0]['longShortRatio']);
+          setTopTLSRatio(Number(data[0]['longShortRatio']).toFixed(2));
         } catch (error) {
           console.error(error);
         }
@@ -62,9 +62,9 @@ const useBoxTicker = (selectedSymbol) => {
 
       const fetchLSRatio = async () => {
         try {
-          const response = await fetch(`https://fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol=${symbSocket}&period=1h`);
+          const response = await fetch(`https://fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol=${symbSocket}&period=6h`);
           const data = await response.json();
-          setLongShortRatio(data[0]['longShortRatio']);
+          setLongShortRatio(Number(data[0]['longShortRatio']).toFixed(2));
         } catch (error) {
           console.error(error);
         }
@@ -81,7 +81,7 @@ const useBoxTicker = (selectedSymbol) => {
         fetchOpenInterest();
         fetchTTLSRatio();
         fetchLSRatio();
-      }, 1000 * 5);
+      }, 1000);
       return () => clearInterval(intervalId);
     } else {
       const symbSocket = selectedSymbol ? selectedSymbol.label.replace(/[^a-z]/gi, '') : 'BTCUSDT';
@@ -90,19 +90,19 @@ const useBoxTicker = (selectedSymbol) => {
           const response = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbSocket}`);
           const data = await response.json();
           setTickerData({
-            priceChange: data.priceChange,
-            priceChangePercent: data.priceChangePercent,
-            highPrice: data.highPrice,
-            lowPrice: data.lowPrice,
-            volume: data.volume,
-            quoteVolume: data.quoteVolume,
+            priceChange: Number(data.priceChange),
+            priceChangePercent: Number(data.priceChangePercent).toFixed(2),
+            highPrice: Number(data.highPrice),
+            lowPrice: Number(data.lowPrice),
+            volume: Number(data.volume).toLocaleString('en-US', {style: 'currency', currency: 'USD'}),
+            quoteVolume: Number(data.quoteVolume).toLocaleString('en-US', {style: 'currency', currency: 'USD'}),
           });
         } catch (error) {
           console.error(error);
         }
       };
       fetchTickerData();
-      const intervalId = setInterval(() => fetchTickerData(), 1000 * 5);
+      const intervalId = setInterval(() => fetchTickerData(), 1000);
       return () => clearInterval(intervalId);
     }
   }, [selectedSymbol]);

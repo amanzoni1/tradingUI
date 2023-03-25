@@ -1,0 +1,122 @@
+.tableWrapper {
+  overflow-y: scroll;
+  height: 126px;
+  margin: 4px;
+}
+
+.tableWrapper::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+}
+
+.tableWrapper::-webkit-scrollbar-thumb {
+  background: #29f1ff;
+  border-radius: 6px;
+}
+
+.dir-button {
+  cursor: pointer;
+}
+
+.pos-table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.ordini {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 6px;
+  font-size: 16px;
+  color: rgb(170, 170, 170);
+  padding-bottom: 8px;
+  border-radius: 0px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid rgb(56, 56, 56);
+  padding-bottom: 2px;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgb(255, 255, 255);
+}
+
+.green-circle {
+  width: 14px;
+  height: 14px;
+  border-radius: 6px;
+  background-color: rgb(14, 203, 129);
+  margin: 0 auto;
+}
+
+.red-circle {
+  width: 14px;
+  height: 14px;
+  border-radius: 6px;
+  background-color: rgb(246, 70, 93);
+  margin: 0 auto;
+}
+
+.pnl-green {
+  color: rgb(14, 203, 129);
+}
+
+.pnl-red {
+  color: rgb(246, 70, 93);
+}
+
+.close-button {
+  color: white;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 4px 12px;
+  border-style: solid;
+  border-radius: 6px;
+  border-color: rgb(56, 56, 56);
+  font-size: 12px;
+  transition: opacity 0.15s;
+  justify-self: center;
+}
+
+.close-button:hover {
+  color: #8bf0f8;
+}
+
+.close-button:active {
+  opacity: 0.3;
+}
+
+.reduce-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.reduce-button {
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  padding: 6px;
+  font-size: 10px;
+  transition: opacity 0.15s;
+  border-radius: 6px;
+  border-color: rgb(56, 56, 56);
+  border-style: solid;
+}
+
+.reduce-button:hover {
+  color: #8bf0f8;
+}
+
+.reduce-button:active {
+  opacity: 0.3;
+}

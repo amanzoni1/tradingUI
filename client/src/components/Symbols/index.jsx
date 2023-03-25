@@ -15,7 +15,7 @@ const Symbols = ({ onChange, selectedSymbol, onChangeAm }) => {
     <div className="blocco-symbols">
       <div className="selection-wrapper">
         <div className="selectionSy" id="symbol" name="symbol">
-          {selectedSymbol ? selectedSymbol.label : 'symbol'}
+          {selectedSymbol ? selectedSymbol.label : 'BTC/USDT'}
         </div>
         <a
           role="button"

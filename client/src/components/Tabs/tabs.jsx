@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './tabs.css';
-import Positions from '../Positions';
+import Positions from '../Positions/positions';
 import Bags from '../Bags';
 import usePositions from '../../hooks/usePositions';
 import useBags from '../../hooks/useBags';
@@ -47,7 +47,7 @@ const Tabs = () => {
       </div>
       <div className="content">
         {tabName === tabNames.Positions && <Positions />}
-        {tabName === tabNames.Orders && 'No Open Orders'}
+        {tabName === tabNames.Orders && <p>No Open Orders</p>}
         {tabName === tabNames.Bags && <Bags />}
       </div>
     </div>

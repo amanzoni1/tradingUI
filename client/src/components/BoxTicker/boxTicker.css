@@ -1,8 +1,99 @@
 .box-ticker {
+  display: flex;
+  flex-direction: column;
   width: 250px;
-  height: 180px;
+  height: 186px;
   border: 1px solid rgb(56, 56, 56);
   border-radius: 6px;
   margin: 0px 6px 0px 2px;
   color: white;
+}
+
+p {
+  margin: 0;
+  font-size: 16px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bt-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: left;
+  border-bottom: 1px solid rgb(56, 56, 56);
+  padding: 6px;
+}
+
+.bt-info {
+  display: flex;
+  flex-direction: row;
+  margin-top: 6px;
+  font-size: 16px;
+}
+
+.bt-info-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-left: 4px;
+}
+
+.bt-info-title-spot {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-left: 4px;
+  margin-top: 20px;
+}
+
+.bt-info-value {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-right: 4px;
+  font-weight: bold;
+}
+
+.bt-info-value-spot {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-right: 4px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.bt-coin {
+  font-size: 22px;
+  margin-left: 14px;
+  font-weight: bold;
+}
+
+.bt-mark {
+  color: grey;
+  margin-left: 8px;
+  margin-top: 6px;
+}
+
+.bt-fr {
+  color: #29f1ff;
+}
+
+.bt-pc-green {
+  color: rgb(14, 203, 129);
+}
+
+.bt-pc-red {
+  color: rgb(246, 70, 93);
 }
