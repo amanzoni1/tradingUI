@@ -4,7 +4,7 @@ import usePositions from '../../hooks/usePositions';
 import config from '../../config';
 import './positions.css';
 
-function Positions() {
+const Positions =() => {
   const { data: positions, isLoading, error, refetch } = usePositions();
   const { closePosition } = useClosePosition();
   const [sortDirection, setSortDirection] = useState('asc');

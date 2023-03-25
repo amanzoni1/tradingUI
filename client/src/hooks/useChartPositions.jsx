@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import usePositions from './usePositions';
 
 
 const useChartPositions = (selectedSymbol) => {
   const { data: positions } = usePositions();
   const [positionLine, setPositionLine] = useState({});
+
 
   useEffect(() => {
     if(selectedSymbol) {
@@ -14,13 +15,14 @@ const useChartPositions = (selectedSymbol) => {
 		      color: positions.filter(e => e.symbol === selectedSymbol.label)[0]['side'] === 'long' ? 'rgb(14, 203, 129)' : 'rgb(246, 70, 93)',
           lineWidth: 2,
           lineStyle : 0,
-		      axisLabelVisible: true,
+		      axisLabelVisible: false,
         } 
-
          setPositionLine({positionLine});
+      } else {
+        setPositionLine({});
       }
     }
-  }, [positions]);
+  }, [selectedSymbol, positions]);
 
 
  return positionLine;
@@ -28,6 +30,3 @@ const useChartPositions = (selectedSymbol) => {
 };
 
 export default useChartPositions;
-
-
-

@@ -41,6 +41,7 @@ p {
   justify-content: space-between;
   align-items: flex-start;
   padding-left: 4px;
+  color: rgb(231, 231, 231);
 }
 
 .bt-info-title-spot {
@@ -87,7 +88,7 @@ p {
 }
 
 .bt-fr {
-  color: #29f1ff;
+  color: #785151;
 }
 
 .bt-pc-green {

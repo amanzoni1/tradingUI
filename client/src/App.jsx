@@ -8,7 +8,7 @@ import Amount from './components/Amount';
 import Tabs from './components/Tabs/tabs';
 import CreateOrder from './components/CreateOrder';
 import TradingPair from './components/TradingPair/TradingPair';
-import ChartComponent from './components/Chart/chart';
+import ChartComponent from './components/Chart/chart1';
 import BoxTicker from './components/BoxTicker/boxTicker';
 import AccountInfo from './components/AccountInfo/accountInfo';
 
