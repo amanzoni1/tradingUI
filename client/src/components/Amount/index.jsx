@@ -17,8 +17,8 @@ const Amount = ({ amount, onChange }) => {
         <button className="button-opt" onClick={() => onChange(50000)}>
           50000
         </button>
-        <button className="button-opt" onClick={() => onChange(70000)}>
-          70000
+        <button className="button-opt" onClick={() => onChange(80000)}>
+          80000
         </button>
       </div>
     </div>

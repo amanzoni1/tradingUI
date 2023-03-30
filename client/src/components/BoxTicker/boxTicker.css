@@ -79,10 +79,11 @@ p {
   font-size: 22px;
   margin-left: 14px;
   font-weight: bold;
+  color: #29f1ff;
 }
 
 .bt-mark {
-  color: grey;
+  color: rgb(220, 220, 220);
   margin-left: 8px;
   margin-top: 6px;
 }

@@ -13,9 +13,9 @@ const useChartPositions = (selectedSymbol) => {
         const positionLine = {
           price: positions.filter(e => e.symbol === selectedSymbol.label)[0]['entryPrice'],
 		      color: positions.filter(e => e.symbol === selectedSymbol.label)[0]['side'] === 'long' ? 'rgb(14, 203, 129)' : 'rgb(246, 70, 93)',
-          lineWidth: 2,
+          lineWidth: 1,
           lineStyle : 0,
-		      axisLabelVisible: false,
+		      axisLabelVisible: true,
         } 
          setPositionLine({positionLine});
       } else {

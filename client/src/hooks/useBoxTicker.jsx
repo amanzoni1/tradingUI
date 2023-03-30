@@ -52,7 +52,7 @@ const useBoxTicker = (selectedSymbol) => {
 
       const fetchTTLSRatio = async () => {
         try {
-          const response = await fetch(`https://fapi.binance.com/futures/data/topLongShortPositionRatio?symbol=${symbSocket}&period=6h`);
+          const response = await fetch(`https://fapi.binance.com/futures/data/topLongShortPositionRatio?symbol=${symbSocket}&period=1h`);
           const data = await response.json();
           setTopTLSRatio(Number(data[0]['longShortRatio']).toFixed(2));
         } catch (error) {
@@ -62,7 +62,7 @@ const useBoxTicker = (selectedSymbol) => {
 
       const fetchLSRatio = async () => {
         try {
-          const response = await fetch(`https://fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol=${symbSocket}&period=6h`);
+          const response = await fetch(`https://fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol=${symbSocket}&period=1h`);
           const data = await response.json();
           setLongShortRatio(Number(data[0]['longShortRatio']).toFixed(2));
         } catch (error) {

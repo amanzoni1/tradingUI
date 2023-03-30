@@ -12,7 +12,7 @@ const useChartUpdates = (selectedSymbol, interval) => {
   const symbSocket = selectedSymbol ? selectedSymbol.label.replace(/[^a-z]/gi, '').toLowerCase() : 'btcusdt';
 
   const isCoinExistInFutureSymbols = selectedSymbol ? futSymbols.find(e => e.label === selectedSymbol.label) : '';
-  const binApi = isCoinExistInFutureSymbols ? config.binanceFutSocket : config.binanceSocket;
+  const binApi = (isCoinExistInFutureSymbols && interval != '1s') ? config.binanceFutSocket : config.binanceSocket;
 
   const { lastMessage } = useWebSocket(binApi + `${symbSocket}@kline_${interval}`, {
     shouldReconnect: (closeEvent) => false,

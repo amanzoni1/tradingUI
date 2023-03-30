@@ -49,29 +49,6 @@
   color: rgb(255, 255, 255);
 }
 
-.green-circle {
-  width: 14px;
-  height: 14px;
-  border-radius: 6px;
-  background-color: rgb(14, 203, 129);
-  margin: 0 auto;
-}
-
-.red-circle {
-  width: 14px;
-  height: 14px;
-  border-radius: 6px;
-  background-color: rgb(246, 70, 93);
-  margin: 0 auto;
-}
-
-.pnl-green {
-  color: rgb(14, 203, 129);
-}
-
-.pnl-red {
-  color: rgb(246, 70, 93);
-}
 
 .close-button {
   color: white;
