@@ -37,7 +37,7 @@ p {
 }
 
 .optionside {
-  min-width: 350px;
+  width: 350px;
 }
 
 .options-tab {
@@ -50,7 +50,7 @@ p {
 
 .graphside {
   flex: 1;
-  height: 516px;
+  height: 524px;
   display: flex;
   align-items: center;
   border: 1px;
@@ -76,20 +76,6 @@ p {
   margin: 4px;
 }
 
-.selection-wrapper {
-  display: flex;
-  width: 100%;
-}
-
-.bin-link {
-  width: 60px;
-  height: 30px;
-  align-self: center;
-}
-
-.bin-logo {
-  border-radius: 6px;
-}
 
 .amount {
   justify-content: space-between;
@@ -111,7 +97,6 @@ p {
   border-color: rgb(56, 56, 56);
 }
 
-.blocco-symbols,
 .blocco-trading {
   display: flex;
   flex-direction: column;
@@ -136,24 +121,6 @@ p {
   box-shadow: 1px 1px 4px #29f1ff;
 }
 
-.selectionSy {
-  background-color: transparent;
-  color: white;
-  font-size: 28px;
-  font-weight: bold;
-  border: 1px;
-  border-style: solid;
-  border-color: rgb(104, 104, 104);
-  width: 80%;
-  border-radius: 6px;
-  margin-top: 8px;
-  margin-left: 28px;
-  padding: 16px;
-  margin-bottom: 18px;
-  box-shadow: 1px 1px 4px #29f1ff;
-  width: 66%;
-}
-
 .selection1 {
   font-family: 'Open Sans Condensed', sans-serif;
   background-color: transparent;
@@ -170,20 +137,6 @@ p {
   padding: 4px;
   justify-content: space-between;
   align-items: center;
-}
-
-.basic {
-  margin-bottom: 14px;
-  width: 90%;
-}
-
-.basic-single {
-  font-size: 18px;
-}
-
-.input-amount {
-  width: 42px;
-  margin-bottom: 44px;
 }
 
 /* caselle opzioni */

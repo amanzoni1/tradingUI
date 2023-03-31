@@ -1,7 +1,7 @@
 .box-ticker {
   display: flex;
   flex-direction: column;
-  width: 250px;
+  width: 288px;
   height: 186px;
   border: 1px solid rgb(56, 56, 56);
   border-radius: 6px;
@@ -79,7 +79,7 @@ p {
   font-size: 22px;
   margin-left: 14px;
   font-weight: bold;
-  color: #29f1ff;
+  color: #8bf0f8;
 }
 
 .bt-mark {

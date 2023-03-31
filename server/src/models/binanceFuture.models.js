@@ -72,7 +72,7 @@ async function createNewOrder(orderParams) {
     const { symbol, type, side, amount } = orderParams;
     let objIndex = tickArr.findIndex((e => e.symbol == symbol));
     let market = binanceFuture.markets[symbol]; 
-    binanceFuture.fapiPrivate_post_leverage({"symbol": market['id'], "leverage": 8});
+    binanceFuture.fapiPrivate_post_leverage({"symbol": market['id'], "leverage": 20});
 
     if (type === 'limit') {
       if (side === 'buy') {

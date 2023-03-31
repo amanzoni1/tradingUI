@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { SWRConfig } from 'swr';
 
 import config from './config';
-import Symbols from './components/Symbols';
+import Symbols from './components/Symbols/symbols';
 import OrderType from './components/OrderType';
 import Amount from './components/Amount';
 import Tabs from './components/Tabs/tabs';
