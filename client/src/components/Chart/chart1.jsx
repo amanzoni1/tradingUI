@@ -71,9 +71,9 @@ const ChartComponent = (props) => {
         },
       },
       width: chartContainerRef.current.clientWidth,
-      height: 516,
+      height: 510,
     });
-    if (interval === '1s') {
+    //if (interval === '1s') {
       const newLineSeries = newChart.addAreaSeries({
         lineColor: '#29f1ff',
         topColor: '#29f1ff',
@@ -121,7 +121,7 @@ const ChartComponent = (props) => {
           bottom: 0,
         },
       });
-    } else {
+    /*} else {
       const newCandlestickSeries = newChart.addCandlestickSeries({
         upColor: '#29f1ff',
         downColor: '#808080',
@@ -171,7 +171,7 @@ const ChartComponent = (props) => {
           bottom: 0,
         },
       });
-    }
+    }*/
     
     const handleResize = () => {
       newChart.applyOptions({ width: chartContainerRef.current.clientWidth });
@@ -185,14 +185,14 @@ const ChartComponent = (props) => {
       newChart.remove();
     };
   }, [chartData]);
-
+/*
   useEffect(() => {
     if (candlestickSeries.current && candle) {
       candlestickSeries.current.update(candle);
       volumeSeries.current.update(volume);
     }
   }, [candle]);
-
+*/
   useEffect(() => {
     if (lineSeries.current && line) {
       lineSeries.current.update(line);
@@ -201,8 +201,8 @@ const ChartComponent = (props) => {
   }, [line]);
 
   useEffect(() => {
-    if(candlestickSeries.current && positionLine) {
-     candlestickSeries.current.createPriceLine(positionLine);
+    if(lineSeries.current && positionLine) {
+     lineSeries.current.createPriceLine(positionLine);
     }
   }, [chartData]);
 

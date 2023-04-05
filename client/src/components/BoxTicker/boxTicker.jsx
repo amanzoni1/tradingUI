@@ -21,26 +21,26 @@ const Ticker = ({ selectedSymbol }) => {
         </div>
         <div className='bt-info'>
           <div className='bt-info-title'>
-            <p>Open interest:</p>
-            <p>Funding rate:</p>
-            <p>24h change:</p>
-            <p>24h volume(USDT):</p>
-            <p>Long/Short ratio:</p>
-            <p>TopTrader l/s ratio:</p>
+            <p className='p-bt'>Open interest:</p>
+            <p className='p-bt'>Funding rate:</p>
+            <p className='p-bt'>24h change:</p>
+            <p className='p-bt'>24h volume(USDT):</p>
+            <p className='p-bt'>Long/Short ratio:</p>
+            <p className='p-bt'>TopTrader l/s ratio:</p>
           </div>
           <div className='bt-info-value'>
-            <p>{openInterest}</p>
-            <p className='bt-fr'>{fundingRate*100}%</p>
+            <p className='p-bt'>{openInterest}</p>
+            <p className='bt-fr'>{(fundingRate*100).toFixed(4)}%</p>
             <div>
               {tickerData.priceChange > 0 ? (
-                <p className='bt-pc-green'>{tickerData.priceChange} / {tickerData.priceChangePercent}%</p>
+                <p className='bt-pc-green'>{tickerData.priceChange}/{tickerData.priceChangePercent}%</p>
               ) : (
-                <p className='bt-pc-red'>{tickerData.priceChange} / {tickerData.priceChangePercent}%</p>
+                <p className='bt-pc-red'>{tickerData.priceChange}/{tickerData.priceChangePercent}%</p>
               )}
             </div>
-            <p>{tickerData.quoteVolume}</p>
-            <p>{longShortRatio}</p>
-            <p>{topTLSRatio}</p>      
+            <p className='p-bt'>{tickerData.quoteVolume}</p>
+            <p className='p-bt'>{longShortRatio}</p>
+            <p className='p-bt'>{topTLSRatio}</p>      
           </div>
         </div>
       </div>
@@ -56,22 +56,22 @@ const Ticker = ({ selectedSymbol }) => {
         </div>
         <div className='bt-info'>
           <div className='bt-info-title-spot'>
-            <p>24h change:</p>
-            <p>24h High:</p>
-            <p>24h Low:</p>
-            <p>24h volume(USDT):</p>
+            <p className='p-bt'>24h change:</p>
+            <p className='p-bt'>24h High:</p>
+            <p className='p-bt'>24h Low:</p>
+            <p className='p-bt'>24h volume(USDT):</p>
           </div>
           <div className='bt-info-value-spot'>
             <div>
               {tickerData.priceChange > 0 ? (
-                <p className='bt-pc-green'>{tickerData.priceChange} / {tickerData.priceChangePercent}%</p>
+                <p className='bt-pc-green'>{tickerData.priceChange}/{tickerData.priceChangePercent}%</p>
               ) : (
-                <p className='bt-pc-red'>{tickerData.priceChange} / {tickerData.priceChangePercent}%</p>
+                <p className='bt-pc-red'>{tickerData.priceChange}/{tickerData.priceChangePercent}%</p>
               )}
             </div>
-            <p>{tickerData.highPrice}</p>
-            <p>{tickerData.lowPrice}</p>
-            <p>{tickerData.quoteVolume}</p>      
+            <p className='p-bt'>{tickerData.highPrice}</p>
+            <p className='p-bt'>{tickerData.lowPrice}</p>
+            <p className='p-bt'>{tickerData.quoteVolume}</p>      
           </div>
         </div>
       </div>

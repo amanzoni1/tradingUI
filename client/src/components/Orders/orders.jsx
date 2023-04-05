@@ -41,7 +41,7 @@ const Orders =() => {
   }
 
   if (sortedPositions?.length === 0) {
-    return <p>No Open Positions</p>;
+    return <p className='p-pos'>No Open Positions</p>;
   }
 
   return (

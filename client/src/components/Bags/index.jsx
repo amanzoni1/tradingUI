@@ -70,7 +70,7 @@ const Bags = () => {
                 })}
               </>
             ) : (
-              <div className="no-positions">No Open Bags</div>
+              <div className="p-pos">No Open Bags</div>
             )}
           </>
         ) : null}

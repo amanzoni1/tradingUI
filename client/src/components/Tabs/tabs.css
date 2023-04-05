@@ -14,15 +14,15 @@
 }
 
 .tab-button {
+  font-family: 'Share Tech Mono', monospace;
   background-color: inherit;
-  font-family: 'Open Sans Condensed', sans-serif;
   text-align: center;
-  font-size: 20px;
+  font-size: 17px;
   float: left;
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 6px 46px;
+  padding: 10px 26px;
   transition: 0.3s;
   color: white;
 }
@@ -36,7 +36,7 @@
 }
 
 .content {
-  margin-top: 8px;
+  margin-top: 20px;
   color: white;
 }
 

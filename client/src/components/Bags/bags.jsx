@@ -41,7 +41,7 @@ const Bags =() => {
   }
 
   if (sortedBag?.length === 0) {
-    return <p>No Open Bags</p>;
+    return <p className='p-pos'>No Open Bags</p>;
   }
 
   return (

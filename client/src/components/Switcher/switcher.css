@@ -15,7 +15,7 @@
 
 .switcher-item {
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: white;
   padding: 6px 7px;
@@ -34,8 +34,8 @@
 .legend{
   position: absolute;
   margin-top: 68px;
-  margin-left: 44px;
-  font-size: 28px;
+  margin-left: 48px;
+  font-size: 26px;
   font-weight: bold;
   z-index: 1000;
 }

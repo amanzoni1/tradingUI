@@ -97,3 +97,7 @@
 .reduce-button:active {
   opacity: 0.3;
 }
+
+.p-pos {
+  color: rgb(207, 207, 207);
+}

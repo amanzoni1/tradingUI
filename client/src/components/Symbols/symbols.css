@@ -12,7 +12,7 @@
 .selectionSy {
   background-color: transparent;
   color: white;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: bold;
   border: 1px;
   border-style: solid;
@@ -60,7 +60,7 @@
 }
 
 .basic-single {
-  font-size: 18px;
+  font-size: 16px;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -77,12 +77,13 @@
   color: white;
   margin-left: 8px;
   margin-right: 8px;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .input-amount {
+  font-family: 'Share Tech Mono', monospace;
   width: 72px;
-  border-radius: 6px;
+  border-radius: 4px;
   margin: 0px 4px 8px 0px;
   border: 1px solid rgb(104, 104, 104);
   box-sizing: border-box;

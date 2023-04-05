@@ -41,7 +41,7 @@ const Positions =() => {
   }
 
   if (sortedPositions?.length === 0) {
-    return <p>No Open Positions</p>;
+    return <p className='p-pos'>No Open Positions</p>;
   }
 
   return (
@@ -53,9 +53,9 @@ const Positions =() => {
             <th style={{ width: '3%'}}>Side</th>
             <th style={{ width: '15%'}}>Symbol</th>
             <th onClick={handleSort} style={{ width: '15%'}} className='dir-button' >Size</th>
-            <th style={{ width: '15%'}}>Entry price</th>
-            <th style={{ width: '15%'}}>PNL</th>
-            <th style={{ width: '18%'}}>Reduce</th>
+            <th style={{ width: '20%'}}>Entry price</th>
+            <th style={{ width: '20%'}}>PNL</th>
+            <th style={{ width: '16%'}}>Reduce</th>
             <th style={{ width: '15%'}}>Close</th>
           </tr>
         </thead>
@@ -65,8 +65,8 @@ const Positions =() => {
               <td style={{ width: '3%'}}> {position.side === 'long' ? <div className="green-circle" /> : <div className="red-circle" />}</td>
               <td style={{ width: '15%'}}>{position.symbol}</td>
               <td style={{ width: '15%'}}>{position.notional.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
-              <td style={{ width: '15%'}}>{position.entryPrice.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
-              <td style={{ width: '15%'}}>
+              <td style={{ width: '20%'}}>{position.entryPrice.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
+              <td style={{ width: '20%'}}>
                 {position.unrealizedPnl > 0 ? ( 
                   <p className="pnl-green">
                     {position.unrealizedPnl.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}
@@ -79,7 +79,7 @@ const Positions =() => {
                   </p>
                 )}
               </td>
-              <td style={{ width: '18%'}} className="reduce-container">
+              <td style={{ width: '16%'}} className="reduce-container">
                       <button
                         className="reduce-button"
                         onClick={() => closePosition(position.symbol, position.side, position.contracts, config.smallReduce)}

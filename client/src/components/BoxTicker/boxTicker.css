@@ -1,7 +1,7 @@
 .box-ticker {
   display: flex;
   flex-direction: column;
-  width: 288px;
+  width: 300px;
   height: 186px;
   border: 1px solid rgb(56, 56, 56);
   border-radius: 6px;
@@ -9,10 +9,13 @@
   color: white;
 }
 
-p {
-  margin: 0;
-  font-size: 16px;
+.p-bt,
+.bt-pc-green,
+.bt-pc-red,
+.bt-fr {
+  font-size: 14px;
   max-width: 100%;
+  margin-bottom: 6px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -24,14 +27,14 @@ p {
   justify-content: center;
   align-items: left;
   border-bottom: 1px solid rgb(56, 56, 56);
-  padding: 6px;
+  padding: 8px;
+  margin-top: 2px;
 }
 
 .bt-info {
   display: flex;
   flex-direction: row;
-  margin-top: 6px;
-  font-size: 16px;
+  margin-top: 8px;
 }
 
 .bt-info-title {
@@ -40,8 +43,8 @@ p {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  padding-left: 4px;
-  color: rgb(231, 231, 231);
+  padding: 0px 0px 0px 4px;
+  color: rgb(207, 207, 207);
 }
 
 .bt-info-title-spot {
@@ -52,6 +55,7 @@ p {
   align-items: flex-start;
   padding-left: 4px;
   margin-top: 20px;
+  color: rgb(207, 207, 207);
 }
 
 .bt-info-value {
@@ -60,7 +64,7 @@ p {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
-  padding-right: 4px;
+  padding: 0px 4px 0px 0px;
   font-weight: bold;
 }
 
@@ -83,7 +87,7 @@ p {
 }
 
 .bt-mark {
-  color: rgb(220, 220, 220);
+  color: rgb(207, 207, 207);
   margin-left: 8px;
   margin-top: 6px;
 }
