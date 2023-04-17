@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import './tabs.css';
 import Positions from '../Positions/positions';
+import Orders from '../Orders/orders';
 import Bags from '../Bags';
 import usePositions from '../../hooks/usePositions';
+import useOpenOrders from '../../hooks/useOpenOrders';
 import useBags from '../../hooks/useBags';
 import ReLoader from '../ReLoader';
+
 
 const tabNames = {
   Positions: 'Positions',
@@ -15,6 +18,7 @@ const tabNames = {
 const Tabs = () => {
   const [tabName, setTabName] = useState('Positions');
   const { data: positions } = usePositions();
+  const { data: orders } = useOpenOrders();
   const { data: bags } = useBags();
 
   const handleTabChange = (event) => setTabName(event.target.value);
@@ -34,7 +38,7 @@ const Tabs = () => {
           value={tabNames.Orders} 
           onClick={handleTabChange}
         >
-          Orders (0)
+          Orders ({orders?.length})
         </button>
         <button 
           className={`tab-button ${tabName === tabNames.Bags ? 'active1' : ''}`}
@@ -47,7 +51,7 @@ const Tabs = () => {
       </div>
       <div className="content">
         {tabName === tabNames.Positions && <Positions />}
-        {tabName === tabNames.Orders && <p className='p-pos'>No Open Orders</p>}
+        {tabName === tabNames.Orders && <Orders />}
         {tabName === tabNames.Bags && <Bags />}
       </div>
     </div>

@@ -54,7 +54,6 @@
   height: 14px;
   border-radius: 6px;
   background-color: rgb(14, 203, 129);
-  margin: 0 auto;
 }
 
 .red-circle {
@@ -62,7 +61,6 @@
   height: 14px;
   border-radius: 6px;
   background-color: rgb(246, 70, 93);
-  margin: 0 auto;
 }
 
 .pnl-green {

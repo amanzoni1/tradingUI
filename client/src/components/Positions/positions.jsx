@@ -65,7 +65,7 @@ const Positions =() => {
               <td style={{ width: '3%'}}> {position.side === 'long' ? <div className="green-circle" /> : <div className="red-circle" />}</td>
               <td style={{ width: '15%'}}>{position.symbol}</td>
               <td style={{ width: '15%'}}>{position.notional.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
-              <td style={{ width: '20%'}}>{position.entryPrice.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
+              <td style={{ width: '20%'}}>{position.entryPrice}</td>
               <td style={{ width: '20%'}}>
                 {position.unrealizedPnl > 0 ? ( 
                   <p className="pnl-green">

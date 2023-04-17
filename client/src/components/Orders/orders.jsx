@@ -1,21 +1,22 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import useClosePosition from '../../hooks/useClosePosition';
-import usePositions from '../../hooks/usePositions';
+import useOpenOrders from '../../hooks/useOpenOrders';
 import config from '../../config';
-import './positions.css';
+import './orders.css';
 
 const Orders =() => {
-  const { data: positions, isLoading, error, refetch } = usePositions();
-  const { closePosition } = useClosePosition();
+  const { data: orders, isLoading, error, refetch } = useOpenOrders();
+  //const { closePosition } = useClosePosition();
   const [sortDirection, setSortDirection] = useState('asc');
   const [refreshInterval, setRefreshInterval] = useState(null);
 
   useEffect(() => {
-    const intervalId = setInterval(() => refetch(), 1000);
+    const intervalId = setInterval(() => refetch(), 10000);
     setRefreshInterval(intervalId); 
     return () => clearInterval(intervalId); 
   }, []);
 
+  /*
   const sortedPositions = useMemo(() => {
     if (!positions) {
       return null;
@@ -30,7 +31,7 @@ const Orders =() => {
 
   const handleSort = () => {
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
+  };*/
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -40,73 +41,43 @@ const Orders =() => {
     return <p>Error: {error.message}</p>;
   }
 
-  if (sortedPositions?.length === 0) {
-    return <p className='p-pos'>No Open Positions</p>;
+  if (orders?.length === 0) {
+    return <p className='p-pos'>No Open Orders</p>;
   }
 
   return (
     <div className='tableWrapper'>
-      {positions ? ( 
+      {orders ? ( 
       <table className='pos-table'>
         <thead className='header'>
           <tr className='ordini'>
-            <th style={{ width: '3%'}}>Side</th>
             <th style={{ width: '15%'}}>Symbol</th>
-            <th onClick={handleSort} style={{ width: '15%'}} className='dir-button' >Size</th>
-            <th style={{ width: '15%'}}>Entry price</th>
-            <th style={{ width: '15%'}}>PNL</th>
-            <th style={{ width: '18%'}}>Reduce</th>
-            <th style={{ width: '15%'}}>Close</th>
+            <th style={{ width: '15%'}}>Type</th>
+            <th style={{ width: '12%'}}>Side</th>
+            <th style={{ width: '16%'}}>Price</th>
+            <th style={{ width: '16%'}}>Amount</th>
+            <th style={{ width: '16%'}}>Filled</th>
+            <th style={{ width: '15%'}}>TriggerCond</th>
+            <th style={{ width: '12%'}}>Cancel</th>
           </tr>
         </thead>
         <tbody>
-          {positions.map((position, index) => (
+          {orders.map((order, index) => (
             <tr key={index} className='container' >
-              <td style={{ width: '3%'}}> {position.side === 'long' ? <div className="green-circle" /> : <div className="red-circle" />}</td>
-              <td style={{ width: '15%'}}>{position.symbol}</td>
-              <td style={{ width: '15%'}}>{position.notional.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
-              <td style={{ width: '15%'}}>{position.entryPrice.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
-              <td style={{ width: '15%'}}>
-                {position.unrealizedPnl > 0 ? ( 
-                  <p className="pnl-green">
-                    {position.unrealizedPnl.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}
-                    ({(position.percentage / position.leverage).toFixed(2)}%)
-                  </p>
-                ) : (  
-                  <p className="pnl-red">
-                    {position.unrealizedPnl.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}
-                    ({(position.percentage / position.leverage).toFixed(2)}%)
-                  </p>
-                )}
+              <td style={{ width: '15%'}}>{order.symbol}</td>
+              <td style={{ width: '15%'}}>{order.origType}</td>
+              <td style={{ width: '12%'}}>{order.side === 'BUY' ? <div className="green-str">BUY</div> : <div className="red-str">SELL</div>}</td>
+              <td style={{ width: '16%'}}>{(order.price).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
+              <td style={{ width: '16%'}}>{(order.stopPrice * order.origQty).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
+              <td style={{ width: '16%'}}>{(order.stopPrice * order.executedQty).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
+              <td style={{ width: '15%'}}>{order.stopPrice.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
+              <td style={{ width: '12%'}}>
+                <button
+                  className="close-button"
+                >
+                 X
+                </button>
               </td>
-              <td style={{ width: '18%'}} className="reduce-container">
-                      <button
-                        className="reduce-button"
-                        onClick={() => closePosition(position.symbol, position.side, position.contracts, config.smallReduce)}
-                      >
-                        20
-                      </button>
-                      <button
-                        className="reduce-button"
-                        onClick={() => closePosition(position.symbol, position.side, position.contracts, config.midReduce)}
-                      >
-                        33
-                      </button>
-                      <button
-                        className="reduce-button"
-                        onClick={() => closePosition(position.symbol, position.side, position.contracts, config.bigReduce)}
-                      >
-                        50
-                      </button>
-                    </td>
-                    <td style={{ width: '15%'}}>
-                    <button
-                      className="close-button"
-                      onClick={() => closePosition(position.symbol, position.side, position.contracts)}
-                    >
-                      X
-                    </button>
-                    </td>
             </tr>
           ))}
         </tbody>

@@ -1,9 +1,14 @@
 const axios = require('axios');
 const ccxt = require ('ccxt');
+const querystring = require('querystring');
+const crypto = require('crypto');
 require('dotenv').config();
 
 const baseURL = 'https://fapi.binance.com';
 const endpoint = '/fapi/v1/ping';
+const urlOrd = '/fapi/v1/openOrders';
+const apiKey = process.env.BINANCE_API_KEY;
+const secretKey = process.env.BINANCE_SECRET_KEY;
 
 const binanceFuture = new ccxt.pro.binanceusdm({
   //'rateLimit': 1000,
@@ -23,6 +28,18 @@ async function loadFutureMarkets() {
   loadTickers();
   keepBinanceFutAlive();
   return markets;
+}
+
+//Generate signature when needed
+function generateSignature(params) {
+  try {
+    const queryString = querystring.stringify(params);
+    const signature = crypto.createHmac('sha256', secretKey).update(queryString).digest('hex');
+    return signature;
+  } catch (error) {
+    console.error('Error generating signature:', error);
+    throw error;
+  }
 }
 
 function keepBinanceFutAlive() {
@@ -150,14 +167,25 @@ async function getPosition() {
   }return openPositions;
 }
 
+//Get all open orders
 async function getOpenOrders() {
-  let positions = await binanceFuture.fetchPositions();
-  let openPositions = [];
-  for (let i = 0; i < positions.length; i++) {
-    if (positions[i]['contracts'] !== 0) {  
-      openPositions.push(positions[i]);
-    } 
-  }return openPositions;
+  const timestamp = Date.now();
+  const url = `${baseURL}${urlOrd}`;
+  const params = { timestamp };
+  const signature = generateSignature(params);
+  const config = {
+    headers: { 'X-MBX-APIKEY': apiKey },
+    params: { ...params, signature },
+  };
+
+  try {
+    const response = await axios.get(url, config);
+    //console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 

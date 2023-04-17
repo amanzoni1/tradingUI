@@ -31,7 +31,7 @@
   justify-content: center;
   overflow: hidden;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 14px;
   color: rgb(170, 170, 170);
   padding-bottom: 8px;
   border-radius: 0px;
@@ -44,32 +44,16 @@
   align-items: center;
   border-bottom: 1px solid rgb(56, 56, 56);
   padding-bottom: 2px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: rgb(255, 255, 255);
 }
 
-.green-circle {
-  width: 14px;
-  height: 14px;
-  border-radius: 6px;
-  background-color: rgb(14, 203, 129);
-  margin: 0 auto;
-}
-
-.red-circle {
-  width: 14px;
-  height: 14px;
-  border-radius: 6px;
-  background-color: rgb(246, 70, 93);
-  margin: 0 auto;
-}
-
-.pnl-green {
+.green-str {
   color: rgb(14, 203, 129);
 }
 
-.pnl-red {
+.red-str {
   color: rgb(246, 70, 93);
 }
 
@@ -77,11 +61,11 @@
   color: white;
   background-color: transparent;
   cursor: pointer;
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-style: solid;
   border-radius: 6px;
   border-color: rgb(56, 56, 56);
-  font-size: 12px;
+  font-size: 10px;
   transition: opacity 0.15s;
   justify-self: center;
 }
@@ -91,33 +75,6 @@
 }
 
 .close-button:active {
-  opacity: 0.3;
-}
-
-.reduce-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
-.reduce-button {
-  background-color: transparent;
-  color: white;
-  cursor: pointer;
-  padding: 6px;
-  font-size: 10px;
-  transition: opacity 0.15s;
-  border-radius: 6px;
-  border-color: rgb(56, 56, 56);
-  border-style: solid;
-}
-
-.reduce-button:hover {
-  color: #8bf0f8;
-}
-
-.reduce-button:active {
   opacity: 0.3;
 }
 

@@ -20,26 +20,32 @@ const useNewsTerminal = () => {
   useEffect(() => {
     if (lastMessage) {
       const message = JSON.parse(lastMessage?.data);
+      const newCoinsSet = new Set();
 
-      if(message?.suggestions?.length > 0) {
+      if (message?.suggestions?.length > 0) {
         const newCoins = message.suggestions.map(suggestion => suggestion.coin + '/USDT');
-        setCoins(prevCoins => [...newCoins, ...prevCoins]);  
-      } 
+        setCoins(prevCoins => [...newCoins, ...prevCoins]); 
+        //message.suggestions.forEach(suggestion => newCoinsSet.add(suggestion.coin + '/USDT'));
+      }
 
-      const matchingCoins = [];
       for (let x in symbols) {
         let coin = symbols[x].label.replace(/\/USDT|\/BUSD/gi, '');
         let coinEx = '(?<![A-Za-z0-9_])[$]?' + coin + '(?:[Uu][Ss][Dd][A-Za-z]*)?(?![A-Za-z0-9_])';
-        let regex = new RegExp(coinEx, 'gi'); 
+        let regex = new RegExp(coinEx, 'gi');
         if (message?.title?.match(regex) || message?.body?.match(regex)) {
           if (coin !== 'T' && coin !== 'FOR') {
-            const coinSym = coin + '/USDT';
-            matchingCoins.push(coinSym);
+            newCoinsSet.add(coin + '/USDT');
           }
         }
       }
-      if (matchingCoins.length > 0) {
-        setCoins(prevCoins => [...matchingCoins, ...prevCoins]);
+
+      if (newCoinsSet.size > 0) {
+        const newCoins = Array.from(newCoinsSet);
+        setCoins(prevCoins => {
+          const lastCoin = prevCoins[0];
+          const filteredNewCoins = newCoins.filter(coin => !prevCoins.includes(coin) && coin !== lastCoin);
+          return [...filteredNewCoins, ...prevCoins];
+        });
       }
     }
   }, [lastMessage]);
@@ -82,3 +88,34 @@ export default useNewsTerminal;
 }, [lastMessage]);
 
 */
+
+
+
+/* versione che funge ma che doppia elementi
+useEffect(() => {
+    if (lastMessage) {
+      const message = JSON.parse(lastMessage?.data);
+
+      if(message?.suggestions?.length > 0) {
+        const newCoins = message.suggestions.map(suggestion => suggestion.coin + '/USDT');
+        setCoins(prevCoins => [...newCoins, ...prevCoins]);  
+      } 
+
+      const matchingCoins = [];
+      for (let x in symbols) {
+        let coin = symbols[x].label.replace(/\/USDT|\/BUSD/gi, '');
+        let coinEx = '(?<![A-Za-z0-9_])[$]?' + coin + '(?:[Uu][Ss][Dd][A-Za-z]*)?(?![A-Za-z0-9_])';
+        let regex = new RegExp(coinEx, 'gi'); 
+        if (message?.title?.match(regex) || message?.body?.match(regex)) {
+          if (coin !== 'T' && coin !== 'FOR') {
+            const coinSym = coin + '/USDT';
+            matchingCoins.push(coinSym);
+          }
+        }
+      }
+      if (matchingCoins.length > 0) {
+        setCoins(prevCoins => [...matchingCoins, ...prevCoins]);
+      }
+    }
+  }, [lastMessage]);
+  */
