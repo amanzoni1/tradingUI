@@ -7,10 +7,11 @@ const TradingPair = ({ selectSymbol }) => {
   const { coins } = useNewsTerminal();
   const { data: symbols } = useSymbols();
   const { openErrorSnackbar } = useSnackbar();
-  const [selectedCoins, setSelectedCoins] = useState(['', '', '', '', '']);
+  const [selectedCoins, setSelectedCoins] = useState([]);
+
 
   useEffect(() => {
-    setSelectedCoins((prevState) => [coins, prevState[0], prevState[1], prevState[2], prevState[3]]);
+    setSelectedCoins(coins?.slice(0, 5));
   }, [coins]);
 
   const isCoinExistInSymbols = (coin) =>
@@ -25,9 +26,9 @@ const TradingPair = ({ selectSymbol }) => {
 
   return (
     <div className="blocco-trading">
-      {selectedCoins.map((coin, index) => {
+      {selectedCoins?.map((coin, index) => {
         return (
-          <button
+          <button 
             className="selection1"
             id="symbol"
             key={coin + index}

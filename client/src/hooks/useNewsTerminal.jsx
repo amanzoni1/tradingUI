@@ -4,7 +4,7 @@ import useSymbols from './useSymbols';
 import config from '../config';
 
 const useNewsTerminal = () => {
-  const [coins, setCoins] = useState('');
+  const [coins, setCoins] = useState(['', '', '', '', '']);
   const { data: symbols } = useSymbols();
 
   const { sendMessage, lastMessage } = useWebSocket(config.wsUri, {
@@ -18,6 +18,44 @@ const useNewsTerminal = () => {
   }, []);
 
   useEffect(() => {
+    if (lastMessage) {
+      const message = JSON.parse(lastMessage?.data);
+
+      if(message?.suggestions?.length > 0) {
+        const newCoins = message.suggestions.map(suggestion => suggestion.coin + '/USDT');
+        setCoins(prevCoins => [...newCoins, ...prevCoins]);  
+      } 
+
+      const matchingCoins = [];
+      for (let x in symbols) {
+        let coin = symbols[x].label.replace(/\/USDT|\/BUSD/gi, '');
+        let coinEx = '(?<![A-Za-z0-9_])[$]?' + coin + '(?:[Uu][Ss][Dd][A-Za-z]*)?(?![A-Za-z0-9_])';
+        let regex = new RegExp(coinEx, 'gi'); 
+        if (message?.title?.match(regex) || message?.body?.match(regex)) {
+          if (coin !== 'T' && coin !== 'FOR') {
+            const coinSym = coin + '/USDT';
+            matchingCoins.push(coinSym);
+          }
+        }
+      }
+      if (matchingCoins.length > 0) {
+        setCoins(prevCoins => [...matchingCoins, ...prevCoins]);
+      }
+    }
+  }, [lastMessage]);
+
+  return { coins };
+};
+
+export default useNewsTerminal;
+
+
+
+
+
+
+/*
+ useEffect(() => {
   if (lastMessage) {
     const message = JSON.parse(lastMessage?.data);
 
@@ -30,7 +68,7 @@ const useNewsTerminal = () => {
     }  else {
       for (let x in symbols) {
         let coin = symbols[x].label.replace(/\/USDT|\/BUSD/gi, '');
-        let coinEx = '[^A-Za-z0-9_]' + coin + '[^A-Za-z0-9_]';
+        let coinEx = '(?<![A-Za-z0-9_])[$]?' + coin + '(?:(?:[Uu][Ss][Dd])|(?:[Uu][Ss][Dd]?[^A-Za-z0-9_]*))[^A-Za-z0-9_]';
         let regex = new RegExp(coinEx, 'gi'); 
         if (message?.title?.match(regex) || message?.body?.match(regex)) {
           if(coin !== 'T' && coin !== 'FOR') {
@@ -43,57 +81,4 @@ const useNewsTerminal = () => {
   }
 }, [lastMessage]);
 
-  return { coins };
-};
-
-export default useNewsTerminal;
-
-
-
-/*
-if (lastMessage) {
-      const message = JSON.parse(lastMessage?.data);
-      const action = message?.actions ? message?.actions[1]?.title : '';
-
-      if (action && action?.length > 0) {
-        const newAction = action.replace(/\/.*/   
-       /*, '/USDT');      <---------------------------------------------------
-        if (isCoinExistInSymbols(newAction)) {
-          setCoins(newAction);
-          return;
-        } if (coinWithOthersQuoteCurr(newAction)) {
-          const newCoin = newAction.replace(/USDT/gi, 'BUSD');
-          setCoins(newCoin);
-          return;
-          } 
-      }
-      if(!action) {
-        for (let x in futSymbols) {
-          let coin = futSymbols[x].label.replace(/\/USDT|\/BUSD/gi, '');
-          let coinEx = '[^A-Za-z0-9_]' + coin + '[^A-Za-z0-9_]';
-          let regex = new RegExp(coinEx, 'gi'); 
-          if (message?.title?.match(regex) || message?.body?.match(regex)) {
-            if(coin !== 'T' && coin !== 'FOR') {
-              const coinSy = coin + '/USDT';
-              setCoins(coinSy);
-            }
-          } else {
-            for (let x in symbols) {
-              let coin = symbols[x].label.replace(/\/USDT|\/BUSD/gi, '');
-              let coinEx = '[^A-Za-z0-9_]' + coin + '[^A-Za-z0-9_]';
-              let regex = new RegExp(coinEx, 'gi'); 
-                if (message?.title?.match(regex) || message?.body?.match(regex)) {
-                  if(coin !== 'T' && coin !== 'FOR') {
-                    const coinSy = coin + '/USDT';
-                    setCoins(coinSy);
-                  }
-                }
-            } 
-          }
-        }
-     }  
-    }
-    */
-
-
-
+*/

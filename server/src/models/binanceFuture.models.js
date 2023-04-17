@@ -72,7 +72,7 @@ async function createNewOrder(orderParams) {
     const { symbol, type, side, amount } = orderParams;
     let objIndex = tickArr.findIndex((e => e.symbol == symbol));
     let market = binanceFuture.markets[symbol]; 
-    binanceFuture.fapiPrivate_post_leverage({"symbol": market['id'], "leverage": 10});
+    //binanceFuture.fapiPrivate_post_leverage({"symbol": market['id'], "leverage": 10});
 
     if (type === 'limit') {
       if (side === 'buy') {
@@ -150,6 +150,16 @@ async function getPosition() {
   }return openPositions;
 }
 
+async function getOpenOrders() {
+  let positions = await binanceFuture.fetchPositions();
+  let openPositions = [];
+  for (let i = 0; i < positions.length; i++) {
+    if (positions[i]['contracts'] !== 0) {  
+      openPositions.push(positions[i]);
+    } 
+  }return openPositions;
+}
+
 
 async function closePosition(orderParams) {
   const { symbol, type, sideClose, contracts, reduction } = orderParams;
@@ -178,6 +188,7 @@ module.exports = {
   getAllFutureSymbols,
   createNewOrder,
   getPosition,
+  getOpenOrders,
   closePosition
 };
 

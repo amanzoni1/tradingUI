@@ -124,6 +124,7 @@ p {
   font-family: 'Share Tech Mono', monospace;
   background-color: transparent;
   cursor: pointer;
+  overflow: hidden;
   color: #8bf0f8;
   height: 34px;
   font-size: 14px;

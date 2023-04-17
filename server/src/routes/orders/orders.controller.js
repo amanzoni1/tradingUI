@@ -1,9 +1,8 @@
 const ccxt = require ('ccxt');
 const binanceFuture = new ccxt.pro.binanceusdm({'options': { 'defaultType': 'future' }});
 
-const { createNewOrder } = require('../../models/binanceFuture.models');
+const { createNewOrder, getOpenOrders } = require('../../models/binanceFuture.models');
 const { createSpotOrder } = require('../../models/binanceSpot.models');
-
 
 
 async function httpCreateNewOrder(req, res) {
@@ -26,6 +25,12 @@ async function httpCreateNewOrder(req, res) {
 }
 
 
+async function httpGetOpenOrders(req, res) {
+  return res.status(200).json(await getOpenOrders());
+}
+
+
 module.exports = {
-  httpCreateNewOrder
+  httpCreateNewOrder,
+  httpGetOpenOrders
 };
