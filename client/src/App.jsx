@@ -18,6 +18,8 @@ const App = () => {
   const [selectedSymbol, setSelectedSymbol] = useState(null);
   const [orderType, setOrderType] = useState(null);
   const [amount, setAmount] = useState(null);
+  const [limitPrice, setLimitPrice] = useState(null);
+  const [stopPrice, setStopPrice] = useState(null);
 
   return (
     <SWRConfig value={config.swr}>
@@ -27,14 +29,14 @@ const App = () => {
             <AccountInfo />
             <div className='options-tab'>
               <div className="contenitore-top">
-                <Symbols onChange={setSelectedSymbol} selectedSymbol={selectedSymbol} onChangeAm={setAmount} />
+                <Symbols onChange={setSelectedSymbol} selectedSymbol={selectedSymbol} onChangeAm={setAmount} onChangeLP={setLimitPrice} onChangeSP={setStopPrice} />
                 <TradingPair selectSymbol={setSelectedSymbol}/>
               </div>
               <div className="contenitore">
                 <Amount amount={amount} onChange={setAmount} />
                 <OrderType type={orderType} onChange={setOrderType} />
               </div>
-              <CreateOrder selectedSymbol={selectedSymbol} orderType={orderType} amount={amount} />
+              <CreateOrder selectedSymbol={selectedSymbol} orderType={orderType} amount={amount} limitPrice={limitPrice} stopPrice={stopPrice} />
             </div>
           </div>
           <div className='graphside'>

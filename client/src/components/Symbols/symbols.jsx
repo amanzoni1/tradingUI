@@ -3,7 +3,7 @@ import useFutureSymbols from '../../hooks/useFutureSymbols';
 import config from '../../config';
 import './symbols.css';
 
-const Symbols = ({ onChange, selectedSymbol, onChangeAm }) => {
+const Symbols = ({ onChange, selectedSymbol, onChangeAm, onChangeLP, onChangeSP }) => {
   const { data: futSymbols } = useFutureSymbols();
 
   const isCoinExistInFutureSymbols = selectedSymbol ? futSymbols.find(e => e.label === selectedSymbol.label) : '';
@@ -62,10 +62,10 @@ const Symbols = ({ onChange, selectedSymbol, onChangeAm }) => {
         <input className="input-amount" type="number" onChange={(event) => onChangeAm(event?.target?.value * 1000)} />
       </div>
       <div className='input-row'>
-        <label className="label-sy">Price:</label>
-        <input className="input-amount" type="number" />
         <label className="label-sy">Stop:</label>
-        <input className="input-amount" type="number" />
+        <input className="input-amount" type="number" onChange={(event) => onChangeSP(event?.target?.value)} />
+        <label className="label-sy">Price:</label>
+        <input className="input-amount" type="number" onChange={(event) => onChangeLP(event?.target?.value)} />
       </div>
     </div>
   );

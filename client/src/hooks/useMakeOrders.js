@@ -1,40 +1,48 @@
 import { usePostRequest } from './requests';
 import { ORDER_SIDE_CLOSE } from '../constants';
-import usePositions from './usePositions';
 import useSnackbar from './useSnackbar';
+
+function filterNullProperties(obj) {
+  return Object.entries(obj)
+    .filter(([key, value]) => value !== null)
+    .reduce((newObj, [key, value]) => ({ ...newObj, [key]: value }), {});
+}
 
 function useMakeOrders() {
   const { data, error, trigger, reset, isMutating } = usePostRequest('/orders');
-  const { refetch: refetchPositions } = usePositions();
   const { openSnackbar, openErrorSnackbar } = useSnackbar();
 
-  const createLongOrder = async (symbol, type, amount) => {
+  const createLongOrder = async (symbol, type, amount, limitPrice, stopPrice) => {
     try {
-      const order = await trigger({
+      const order = await trigger(filterNullProperties({
         type,
         amount,
         symbol: symbol.label,
+        //symbol: symbol.label.replace(/\//g, ''),
         side: ORDER_SIDE_CLOSE.BUY,
-      });
+        limitPrice,
+        stopPrice
+      }));
 
       openSnackbar(`Order created successfully. Status: ${order.status}`);
-      await refetchPositions();
     } catch (error) {
       openErrorSnackbar(`Error: ${error.message}`);
     }
   };
 
-  const createShortOrder = async (symbol, type, amount) => {
+  const createShortOrder = async (symbol, type, amount, limitPrice, stopPrice) => {
     try {
-      const order = await trigger({
+      const order = await trigger(filterNullProperties({
         type,
         amount,
         symbol: symbol.label,
+        //symbol: symbol.label.replace(/\//g, ''),
         side: ORDER_SIDE_CLOSE.SELL,
-      });
+        limitPrice,
+        stopPrice
+      }));
 
       openSnackbar(`Order created successfully. Status: ${order.status}`);
-      await refetchPositions();
     } catch (error) {
       openErrorSnackbar(`Error: ${error.message}`);
     }
