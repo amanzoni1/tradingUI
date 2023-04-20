@@ -12,16 +12,19 @@ const infoObj = {};
 
 
 // make everything start
-async function loadFutureMarkets() { 
+async function loadFutureMarkets1() { 
   console.log('future markets have been started!');
   
   keepBinanceFutAlive();
   binSocket();
   setinfoObj();
-  setInterval(optimalLeverage, 6 * 60 * 60 * 1000);
+  setInterval(setinfoObj, 6 * 60 * 60 * 1000);
+  setInterval(optimalLeverage, 12 * 60 * 60 * 1000);
 }
 
 
+
+// BACKGROUND SETTING PROPERTY
 
 //keep sending ping
 function keepBinanceFutAlive() {
@@ -33,87 +36,6 @@ function keepBinanceFutAlive() {
     }
   }, 1000*20);
 }
-
-//Generate signature when needed
-function generateSignature(params) {
-  try {
-    const queryString = Object.keys(params)
-      .map((key) => {
-        if (key === 'orderIdList') {
-          return `${key}=${encodeURIComponent(JSON.stringify(params[key]))}`;
-        } else {
-          return `${key}=${params[key]}`;
-        }
-      })
-      .join('&');
-
-    const signature = crypto.createHmac('sha256', secretKey).update(queryString).digest('hex');
-    return signature;
-  } catch (error) {
-    console.error('Error generating signature:', error);
-    throw error;
-  }
-}
-
-//Get all symbols
-async function getAllFutureSymbols() {
-  try {
-    const response = await axios.get(`${baseURL}/fapi/v1/exchangeInfo`);
-    const symbols = response.data.symbols
-      .filter(e => e.status === 'TRADING')
-      .map(e => e.symbol);
-
-    const modifiedSymbols = symbols.map(e => {
-      if (e.endsWith('USDT')) {
-        return e.slice(0, -4) + '/' + 'USDT';
-      } else if (e.endsWith('BUSD')) {
-        return e.slice(0, -4) + '/' + 'BUSD';
-      } else {
-        return e;
-      }
-    });
-
-    const renderSymbols = modifiedSymbols.map(e => ({ label: e, value: e }));
-    return renderSymbols;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-//Get available margin
-async function getMarginBalance() {
-  try {
-    const timestamp = Date.now();
-    const url = `${baseURL}/fapi/v2/account`;
-    const params = { timestamp };
-    const signature = generateSignature(params);
-    const config = {
-      headers: { 'X-MBX-APIKEY': apiKey },
-      params: { ...params, signature },
-    };
-
-    const response = await axios.get(url, config);
-    const accountData = response.data;
-    const marginBalance = accountData.assets.find(asset => asset.asset === 'USDT').crossWalletBalance;
-    console.log('Margin Balance Available:', marginBalance);
-    return marginBalance;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-
-
-
-
-
-
-
-
-
-// BACKGROUND SETTING PROPERTY
 
 // Track real time price of the coin and save them in an array, first price is the last
 function binSocket() {
@@ -214,6 +136,90 @@ async function setLeverage(symbol, leverage) {
     console.error(error);
   }
 }
+
+
+
+
+
+
+
+
+
+
+// GENERAL FUNCTIONS
+
+//Generate signature when needed
+function generateSignature(params) {
+  try {
+    const queryString = Object.keys(params)
+      .map((key) => {
+        if (key === 'orderIdList') {
+          return `${key}=${encodeURIComponent(JSON.stringify(params[key]))}`;
+        } else {
+          return `${key}=${params[key]}`;
+        }
+      })
+      .join('&');
+
+    const signature = crypto.createHmac('sha256', secretKey).update(queryString).digest('hex');
+    return signature;
+  } catch (error) {
+    console.error('Error generating signature:', error);
+    throw error;
+  }
+}
+
+//Get all symbols
+async function getAllFutureSymbols() {
+  try {
+    const response = await axios.get(`${baseURL}/fapi/v1/exchangeInfo`);
+    const symbols = response.data.symbols
+      .filter(e => e.status === 'TRADING')
+      .map(e => e.symbol);
+
+    const modifiedSymbols = symbols.map(e => {
+      if (e.endsWith('USDT')) {
+        return e.slice(0, -4) + '/' + 'USDT';
+      } else if (e.endsWith('BUSD')) {
+        return e.slice(0, -4) + '/' + 'BUSD';
+      } else {
+        return e;
+      }
+    });
+
+    const renderSymbols = modifiedSymbols.map(e => ({ label: e, value: e }));
+    return renderSymbols;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+//Get available margin
+async function getMarginBalance() {
+  try {
+    const timestamp = Date.now();
+    const url = `${baseURL}/fapi/v2/account`;
+    const params = { timestamp };
+    const signature = generateSignature(params);
+    const config = {
+      headers: { 'X-MBX-APIKEY': apiKey },
+      params: { ...params, signature },
+    };
+
+    const response = await axios.get(url, config);
+    const accountData = response.data;
+    const marginBalance = accountData.assets.find(asset => asset.asset === 'USDT').crossWalletBalance;
+    console.log('Margin Balance Available:', marginBalance);
+    return marginBalance;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+
+
 
 
 
@@ -569,7 +575,7 @@ function formatMarketQuantity(quantity, symbolFilters) {
 
 
 module.exports = {
-  loadFutureMarkets,
+  loadFutureMarkets1,
   getAllFutureSymbols,
   createOrder,
   getOpenPositions,

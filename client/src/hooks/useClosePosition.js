@@ -8,9 +8,11 @@ const useClosePosition = () => {
   const { openSnackbar, openErrorSnackbar } = useSnackbar();
   const { refetch: refetchPositions } = usePositions();
 
-  const closePosition = async (symbol, side, contracts, reduction = 1) => {
+  const closePosition = async (symbol, positionAmt, reduction = 1) => {
     try {
       const type = 'market';
+      const side = positionAmt > 0 ? 'long' : 'short';
+      const contracts = Math.abs(positionAmt);
       const sideClose = side === ORDER_SIDE.LONG ? ORDER_SIDE_CLOSE.SELL : ORDER_SIDE_CLOSE.BUY;
 
       trigger({

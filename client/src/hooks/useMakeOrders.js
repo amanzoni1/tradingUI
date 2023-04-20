@@ -2,9 +2,9 @@ import { usePostRequest } from './requests';
 import { ORDER_SIDE_CLOSE } from '../constants';
 import useSnackbar from './useSnackbar';
 
-function filterNullProperties(obj) {
+function filterFalsyProperties(obj) {
   return Object.entries(obj)
-    .filter(([key, value]) => value !== null)
+    .filter(([key, value]) => !!value)
     .reduce((newObj, [key, value]) => ({ ...newObj, [key]: value }), {});
 }
 
@@ -14,13 +14,14 @@ function useMakeOrders() {
 
   const createLongOrder = async (symbol, type, amount, limitPrice, stopPrice) => {
     try {
-      const order = await trigger(filterNullProperties({
+      const order = await trigger(filterFalsyProperties({
+        //type: type.toUpperCase(),
         type,
         amount,
         symbol: symbol.label,
         //symbol: symbol.label.replace(/\//g, ''),
         side: ORDER_SIDE_CLOSE.BUY,
-        limitPrice,
+        price: limitPrice,
         stopPrice
       }));
 
@@ -32,13 +33,14 @@ function useMakeOrders() {
 
   const createShortOrder = async (symbol, type, amount, limitPrice, stopPrice) => {
     try {
-      const order = await trigger(filterNullProperties({
+      const order = await trigger(filterFalsyProperties({
+        //type: type.toUpperCase(),
         type,
         amount,
         symbol: symbol.label,
         //symbol: symbol.label.replace(/\//g, ''),
         side: ORDER_SIDE_CLOSE.SELL,
-        limitPrice,
+        price: limitPrice,
         stopPrice
       }));
 

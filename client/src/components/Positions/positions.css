@@ -10,13 +10,18 @@
 }
 
 .tableWrapper::-webkit-scrollbar-thumb {
-  background: #29f1ff;
+  background: rgb(41, 241, 255);
   border-radius: 6px;
 }
 
 .dir-button {
   cursor: pointer;
 }
+
+tr.ordini th {
+  font-size: 12px;
+}
+
 
 .pos-table {
   border-collapse: collapse;
@@ -27,11 +32,10 @@
 .ordini {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  text-align: left;
   overflow: hidden;
+  font-size: 8px;
   border-radius: 6px;
-  font-size: 14px;
   color: rgb(170, 170, 170);
   padding-bottom: 8px;
   border-radius: 0px;
@@ -40,29 +44,47 @@
 .container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  text-align: left;
   border-bottom: 1px solid rgb(56, 56, 56);
   padding-bottom: 2px;
-  font-size: 14px;
   font-weight: 500;
   color: rgb(255, 255, 255);
 }
 
+.container:hover {
+  background-color: rgba(41, 241, 255, 0.1);
+}
+
 .green-circle {
-  width: 14px;
-  height: 14px;
-  border-radius: 6px;
+  margin-right: 6px;
+  width: 5px;
+  height: 22px;
   background-color: rgb(14, 203, 129);
 }
 
 .red-circle {
-  width: 14px;
-  height: 14px;
-  border-radius: 6px;
+  margin-right: 6px;
+  width: 5px;
+  height: 22px;
   background-color: rgb(246, 70, 93);
 }
 
+.green-text {
+  color: rgb(14, 203, 129);
+}
+
+.red-text {
+  color: rgb(246, 70, 93);
+}
+
+.leverage {
+  color: rgb(183, 156, 47);
+  font-size: 12px;
+}
+.liqui {
+  color: rgb(183, 156, 47);
+  font-size: 12px;
+}
 .pnl-green {
   color: rgb(14, 203, 129);
 }
@@ -82,6 +104,7 @@
   font-size: 10px;
   transition: opacity 0.15s;
   justify-self: center;
+  margin-left: 4px;
 }
 
 .close-button:hover {

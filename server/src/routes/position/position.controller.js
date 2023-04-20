@@ -1,10 +1,11 @@
 const { getPosition, closePosition } = require('../../models/binanceFuture.models');
+const { getOpenPositions } = require('../../models/binanceFuture1.models');
 const { getOpenBags, sellTheBag } = require('../../models/binanceSpot.models')
 
 
 
 async function httpGetPosition(req, res) {
-  return res.status(200).json(await getPosition());
+  return res.status(200).json(await getOpenPositions());
 }
 
 

@@ -1,9 +1,6 @@
 const express = require('express');
 
-const { 
-  httpGetAllMarkets,
-  httpGetAllFutureMarkets
-} = require('./markets.controller');
+const { httpGetAllMarkets, httpGetAllFutureMarkets } = require('./markets.controller');
 
 const marketsRouter = express.Router();
 
