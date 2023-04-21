@@ -295,6 +295,27 @@ async function queryOrders(symbol, orderId) {
   }
 }
 
+//Delete an open order
+async function deleteOrder(orderParams) {
+  const { symbol, orderId } = orderParams;
+  const timestamp = Date.now();
+  const url = `${baseURL}/fapi/v1/order`;
+  const params = { timestamp, symbol, orderId };
+  const signature = generateSignature(params);
+  const config = {
+    headers: { 'X-MBX-APIKEY': apiKey },
+    params: { ...params, signature },
+  };
+
+  try {
+    const response = await axios.delete(url, config);
+    return response.data;
+  } catch (e) {
+    console.error(e.response.data);
+    return e;
+  }
+}
+
 
 
 
@@ -601,14 +622,14 @@ function formatMarketQuantity(quantity, symbolFilters) {
 
 
 
-
 module.exports = {
   loadFutureMarkets,
   getAllFutureSymbols,
   createOrder,
   getOpenPositions,
   getOpenOrders,
-  closePosition
+  closePosition,
+  deleteOrder
 };
 
 

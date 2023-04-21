@@ -1,12 +1,10 @@
 import { usePostRequest } from './requests';
 import { ORDER_SIDE, ORDER_SIDE_CLOSE } from '../constants';
 import useSnackbar from './useSnackbar';
-import usePositions from './usePositions';
 
 const useClosePosition = () => {
   const { trigger, data, error } = usePostRequest('/position/future');
   const { openSnackbar, openErrorSnackbar } = useSnackbar();
-  const { refetch: refetchPositions } = usePositions();
 
   const closePosition = async (symbol, positionAmt, reduction = 1) => {
     try {
@@ -24,7 +22,6 @@ const useClosePosition = () => {
       });
 
       openSnackbar('Order has been closed successfully..');
-      await refetchPositions();
     } catch (error) {
       openErrorSnackbar(`Error: ${error.message}`);
     }
