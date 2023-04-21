@@ -1,5 +1,4 @@
-const { getPosition, closePosition } = require('../../models/binanceFuture.models');
-const { getOpenPositions } = require('../../models/binanceFuture1.models');
+const { getOpenPositions, closePosition } = require('../../models/binanceFuture.models');
 const { getOpenBags, sellTheBag } = require('../../models/binanceSpot.models')
 
 

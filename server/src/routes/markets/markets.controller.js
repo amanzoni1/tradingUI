@@ -1,5 +1,4 @@
 const { getAllFutureSymbols } = require('../../models/binanceFuture.models');
-//const { getAllFutureSymbols } = require('../../models/binanceFuture1.models');
 const { getAllSymbols } = require('../../models/binanceSpot.models');
 
 

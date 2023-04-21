@@ -15,11 +15,10 @@ function useMakeOrders() {
   const createLongOrder = async (symbol, type, amount, limitPrice, stopPrice) => {
     try {
       const order = await trigger(filterFalsyProperties({
-        //type: type.toUpperCase(),
-        type,
+        type: type.toUpperCase(),
         amount,
-        symbol: symbol.label,
-        //symbol: symbol.label.replace(/\//g, ''),
+        //symbol: symbol.label,
+        symbol: symbol.label.replace(/\//g, ''),
         side: ORDER_SIDE_CLOSE.BUY,
         price: limitPrice,
         stopPrice
@@ -34,11 +33,10 @@ function useMakeOrders() {
   const createShortOrder = async (symbol, type, amount, limitPrice, stopPrice) => {
     try {
       const order = await trigger(filterFalsyProperties({
-        //type: type.toUpperCase(),
-        type,
+        type: type.toUpperCase(),
         amount,
-        symbol: symbol.label,
-        //symbol: symbol.label.replace(/\//g, ''),
+        //symbol: symbol.label,
+        symbol: symbol.label.replace(/\//g, ''),
         side: ORDER_SIDE_CLOSE.SELL,
         price: limitPrice,
         stopPrice

@@ -6,11 +6,11 @@ export const ORDER_TYPE = {
 };
 
 export const ORDER_SIDE_CLOSE = {
-  BUY: 'buy',
-  SELL: 'sell',
+  BUY: 'BUY',
+  SELL: 'SELL',
 };
 
 export const ORDER_SIDE = {
-  LONG: 'long',
-  SHORT: 'short',
+  LONG: 'LONG',
+  SHORT: 'SHORT',
 };

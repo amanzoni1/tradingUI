@@ -10,14 +10,13 @@ const useClosePosition = () => {
 
   const closePosition = async (symbol, positionAmt, reduction = 1) => {
     try {
-      const type = 'market';
-      const side = positionAmt > 0 ? 'long' : 'short';
+      const type = 'MARKET';
+      const side = positionAmt > 0 ? 'LONG' : 'SHORT';
       const contracts = Math.abs(positionAmt);
       const sideClose = side === ORDER_SIDE.LONG ? ORDER_SIDE_CLOSE.SELL : ORDER_SIDE_CLOSE.BUY;
 
       trigger({
         symbol,
-        side,
         contracts,
         type,
         sideClose,

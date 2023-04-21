@@ -92,7 +92,7 @@ const Positions =() => {
             <th style={{ width: '13%'}}>EntryPrice</th>
             <th style={{ width: '13%'}}>MarkPrice</th>
             <th style={{ width: '13%'}}>LiqPrice</th>
-            <th style={{ width: '18%'}} onClick={() => handleSort('unRealizedProfit')} className='dir-button'>PNL</th>
+            <th style={{ width: '20%'}} onClick={() => handleSort('unRealizedProfit')} className='dir-button'>PNL</th>
             <th style={{ width: '11%'}}>Reduce</th>
             <th style={{ width: '7%'}}>Close</th>
           </tr>
@@ -116,7 +116,7 @@ const Positions =() => {
               <td style={{ width: '13%', fontSize: '12px'}}>{dynamicToFixed(parseFloat(position.entryPrice))}</td>
               <td style={{ width: '13%', fontSize: '12px'}}>{dynamicToFixed(parseFloat(position.markPrice))}</td>
               <td className='liqui' style={{ width: '13%'}}>{dynamicToFixed(parseFloat(position.liquidationPrice))}</td>
-              <td style={{ width: '18%'}}>
+              <td style={{ width: '20%'}}>
                 {position.unRealizedProfit > 0 ? ( 
                   <p className="pnl-green">
                     {parseFloat(position.unRealizedProfit).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}
