@@ -32,9 +32,9 @@ const useBoxTicker = (selectedSymbol) => {
 
       const fetchFundingRate = async () => {
         try {
-          const response = await fetch(`https://fapi.binance.com/fapi/v1/fundingRate?symbol=${symbSocket}`);
+          const response = await fetch(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${symbSocket}`);
           const data = await response.json();
-          setFundingRate(Number(data[99]['fundingRate']));
+          setFundingRate(Number(data.lastFundingRate));
         } catch (error) {
           console.error(error);
         }

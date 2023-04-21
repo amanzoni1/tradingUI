@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import usePositions from './usePositions';
 
 
@@ -6,13 +6,16 @@ const useChartPositions = (selectedSymbol) => {
   const { data: positions } = usePositions();
   const [positionLine, setPositionLine] = useState({});
 
+  const symbol = selectedSymbol?.label.replace(/\//g, '');
+
 
   useEffect(() => {
     if(selectedSymbol) {
-      if (positions.find(e => e.symbol === selectedSymbol.label)) {
+      const positionN = positions.find(e => e.symbol === symbol)
+      if (positionN) {
         const positionLine = {
-          price: positions.filter(e => e.symbol === selectedSymbol.label)[0]['entryPrice'],
-		      color: positions.filter(e => e.symbol === selectedSymbol.label)[0]['positionAmt'] > 0 ? 'rgb(14, 203, 129)' : 'rgb(246, 70, 93)',
+          price: Number(positionN['entryPrice']),
+		      color: Number(positionN['positionAmt']) > 0 ? 'rgb(14, 203, 129)' : 'rgb(246, 70, 93)',
           lineWidth: 2,
           lineStyle : 0,
 		      axisLabelVisible: true,
@@ -21,6 +24,8 @@ const useChartPositions = (selectedSymbol) => {
       } else {
         setPositionLine({});
       }
+    } else {
+      setPositionLine({});
     }
   }, [selectedSymbol, positions]);
 

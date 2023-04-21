@@ -1,36 +1,42 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { createChart } from 'lightweight-charts';
 import useChartHistory from '../../hooks/useChartHystory';
 import useChartUpdates from '../../hooks/useChartUpdates';
 import useChartPositions from '../../hooks/useChartPositions';
+import useChartOrders from '../../hooks/useChartOrders';
 import Switcher from '../Switcher/switcher';
 import './chart.css';
 
 
-const ChartComponent = (props) => {
-  const { selectedSymbol } = props;
+const ChartComponent = ({ selectedSymbol }) => {
   const chartContainerRef = useRef(null);
-  const candlestickSeries = useRef(null);
+  //const candlestickSeries = useRef(null);
   const lineSeries = useRef(null);
   const volumeSeries = useRef(null);
   const [interval, setInterval] = useState('1m');
+  const [priceLines, setPriceLines] = useState({ positionLine: null, orderLines: [] });
+  const [updateLines, setUpdateLines] = useState(false);
   const { chartData } = useChartHistory(selectedSymbol, interval);
   const { line, candle, volume } = useChartUpdates(selectedSymbol, interval);
   const  { positionLine } = useChartPositions(selectedSymbol);
+  const orderLines = useChartOrders(selectedSymbol);
   const [chart, setChart] = useState(null);
 
-  const newChartDataCandle = () => {
+  const newChartDataCandle = useCallback(() => {
     return chartData.map((cart) => ({ time: cart[0] / 1000 + 3600, open: Number(cart[1]), high: Number(cart[2]), low: Number(cart[3]), close: Number(cart[4]) }));
-  };
-  const newVolData = () => {
+  }, [chartData]);
+
+  const newVolData = useCallback(() => {
     return chartData.map((cart) => ({ time: cart[0] / 1000 + 3600, value: Number(cart[7]) }));
-  };
-  const newChartData = () => {
+  }, [chartData]);
+
+  const newChartData = useCallback(() => {
     return chartData.map((cart) => ({ time: cart[0] / 1000 + 3600, value: Number(cart[4]) }));
-  };
+  }, [chartData]);
+
 
   useEffect(() => {
-    if (!chartData || !chartData[0]) {
+    if (!chartData?.[0]) {
       return;
     }
     const newChart = createChart(chartContainerRef.current, {
@@ -200,11 +206,46 @@ const ChartComponent = (props) => {
     }
   }, [line]);
 
+
   useEffect(() => {
-    if(lineSeries.current && positionLine) {
-     lineSeries.current.createPriceLine(positionLine);
+    setUpdateLines((prev) => !prev);
+  }, [positionLine, orderLines, line]);
+
+
+
+  useEffect(() => {
+  if (lineSeries.current) {
+    // Position Line
+    if (positionLine) {
+      if (priceLines.positionLine) {
+        lineSeries.current.removePriceLine(priceLines.positionLine);
+      }
+      const newPositionLine = lineSeries.current.createPriceLine(positionLine);
+      setPriceLines((prev) => ({ ...prev, positionLine: newPositionLine }));
+    } else if (priceLines.positionLine) {
+      lineSeries.current.removePriceLine(priceLines.positionLine);
+      setPriceLines((prev) => ({ ...prev, positionLine: null }));
     }
-  }, [chartData]);
+
+    // Order Lines
+    if (priceLines.orderLines) {
+      // Remove all existing order lines from the chart
+      priceLines.orderLines.forEach((oldOrderLine) => {
+        lineSeries.current.removePriceLine(oldOrderLine);
+      });
+    }
+
+    // Create new order lines for the updated orderLines array only if it's defined
+    const newOrderLines = orderLines ? orderLines.map((orderLine) => {
+      return lineSeries.current.createPriceLine(orderLine);
+    }) : [];
+
+    // Update the state with the new order lines
+    setPriceLines((prev) => ({ ...prev, orderLines: newOrderLines }));
+  }
+}, [lineSeries, updateLines, positionLine, orderLines]);
+
+
 
 
   return (
