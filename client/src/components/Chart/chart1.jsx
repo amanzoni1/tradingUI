@@ -10,8 +10,8 @@ import './chart.css';
 
 const ChartComponent = ({ selectedSymbol }) => {
   const chartContainerRef = useRef(null);
-  //const candlestickSeries = useRef(null);
-  const lineSeries = useRef(null);
+  const candlestickSeries = useRef(null);
+  //const lineSeries = useRef(null);
   const volumeSeries = useRef(null);
   const [interval, setInterval] = useState('1m');
   const [priceLines, setPriceLines] = useState({ positionLine: null, orderLines: [] });
@@ -79,7 +79,7 @@ const ChartComponent = ({ selectedSymbol }) => {
       width: chartContainerRef.current.clientWidth,
       height: 510,
     });
-    //if (interval === '1s') {
+    /*if (interval === '1s') {
       const newLineSeries = newChart.addAreaSeries({
         lineColor: '#29f1ff',
         topColor: '#29f1ff',
@@ -127,7 +127,7 @@ const ChartComponent = ({ selectedSymbol }) => {
           bottom: 0,
         },
       });
-    /*} else {
+    } else {*/
       const newCandlestickSeries = newChart.addCandlestickSeries({
         upColor: '#29f1ff',
         downColor: '#808080',
@@ -177,7 +177,7 @@ const ChartComponent = ({ selectedSymbol }) => {
           bottom: 0,
         },
       });
-    }*/
+    //}
     
     const handleResize = () => {
       newChart.applyOptions({ width: chartContainerRef.current.clientWidth });
@@ -191,39 +191,39 @@ const ChartComponent = ({ selectedSymbol }) => {
       newChart.remove();
     };
   }, [chartData]);
-/*
+
   useEffect(() => {
     if (candlestickSeries.current && candle) {
       candlestickSeries.current.update(candle);
       volumeSeries.current.update(volume);
     }
   }, [candle]);
-*/
+/*
   useEffect(() => {
     if (lineSeries.current && line) {
       lineSeries.current.update(line);
       volumeSeries.current.update(volume);
     }
   }, [line]);
-
+*/
 
   useEffect(() => {
     setUpdateLines((prev) => !prev);
-  }, [positionLine, orderLines, line]);
+  }, [positionLine, orderLines, candle]);
 
 
 
   useEffect(() => {
-  if (lineSeries.current) {
+  if (candlestickSeries.current) {
     // Position Line
     if (positionLine) {
       if (priceLines.positionLine) {
-        lineSeries.current.removePriceLine(priceLines.positionLine);
+        candlestickSeries.current.removePriceLine(priceLines.positionLine);
       }
-      const newPositionLine = lineSeries.current.createPriceLine(positionLine);
+      const newPositionLine = candlestickSeries.current.createPriceLine(positionLine);
       setPriceLines((prev) => ({ ...prev, positionLine: newPositionLine }));
     } else if (priceLines.positionLine) {
-      lineSeries.current.removePriceLine(priceLines.positionLine);
+      candlestickSeries.current.removePriceLine(priceLines.positionLine);
       setPriceLines((prev) => ({ ...prev, positionLine: null }));
     }
 
@@ -231,19 +231,19 @@ const ChartComponent = ({ selectedSymbol }) => {
     if (priceLines.orderLines) {
       // Remove all existing order lines from the chart
       priceLines.orderLines.forEach((oldOrderLine) => {
-        lineSeries.current.removePriceLine(oldOrderLine);
+        candlestickSeries.current.removePriceLine(oldOrderLine);
       });
     }
 
     // Create new order lines for the updated orderLines array only if it's defined
     const newOrderLines = orderLines ? orderLines.map((orderLine) => {
-      return lineSeries.current.createPriceLine(orderLine);
+      return candlestickSeries.current.createPriceLine(orderLine);
     }) : [];
 
     // Update the state with the new order lines
     setPriceLines((prev) => ({ ...prev, orderLines: newOrderLines }));
   }
-}, [lineSeries, updateLines, positionLine, orderLines]);
+}, [candlestickSeries, updateLines, positionLine, orderLines]);
 
 
 

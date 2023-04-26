@@ -120,12 +120,12 @@ const Positions =() => {
                 {position.unRealizedProfit > 0 ? ( 
                   <p className="pnl-green">
                     {parseFloat(position.unRealizedProfit).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}
-                    ({parseFloat((position.unRealizedProfit / (Math.abs(position.positionAmt * position.markPrice)) * 100).toFixed(2))}%)
+                    ({parseFloat((position.unRealizedProfit / (Math.abs(position.positionAmt * position.entryPrice)) * 100).toFixed(2))}%)
                   </p>
                 ) : (  
                   <p className="pnl-red">
                     {parseFloat(position.unRealizedProfit).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}
-                    ({parseFloat((position.unRealizedProfit / (Math.abs(position.positionAmt * position.markPrice)) * 100).toFixed(2))}%)
+                    ({parseFloat((position.unRealizedProfit / (Math.abs(position.positionAmt * position.entryPrice)) * 100).toFixed(2))}%)
                   </p>
                 )}
               </td>

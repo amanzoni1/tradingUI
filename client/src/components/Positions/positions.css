@@ -10,7 +10,7 @@
 }
 
 .tableWrapper::-webkit-scrollbar-thumb {
-  background: rgb(41, 241, 255);
+  background: #8bf0f8;
   border-radius: 6px;
 }
 
