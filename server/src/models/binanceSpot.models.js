@@ -44,11 +44,11 @@ async function loadTickers() {
   let endRegex2 = /UP\/USDT$|DOWN\/USDT$|UP\/BUSD$|DOWN\/BUSD$/gi;
   const selected = preSelected.filter(e => !e.match(endRegex2));
 
-  await Promise.all (selected.map (symbol => loop(symbol)));
+  //await Promise.all (selected.map (symbol => loop(symbol)));
 }
 
 let tickArr = [];
-
+/*
 async function loop(symbol) {
   while (true) {
     try {
@@ -66,7 +66,7 @@ async function loop(symbol) {
       console.log (symbol);
     }
   }   
-}
+}*/
 
 
 function getAllSymbols() {

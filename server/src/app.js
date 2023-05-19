@@ -4,6 +4,7 @@ const path = require('path');
 const cors = require('cors');
 
 const positionRouter = require('./routes/position/position.router');
+const accountRouter = require('./routes/account/account.router');
 const marketsRouter = require('./routes/markets/markets.router');
 const orderRouter = require('./routes/orders/orders.router');
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.use('/position', positionRouter);
+app.use('/account', accountRouter);
 app.use('/markets', marketsRouter);
 app.use('/orders', orderRouter);
 

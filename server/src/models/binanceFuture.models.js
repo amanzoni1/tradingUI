@@ -18,6 +18,7 @@ async function loadFutureMarkets() {
   keepBinanceFutAlive();
   binSocket();
   setinfoObj();
+  optimalLeverage();
   setInterval(setinfoObj, 6 * 60 * 60 * 1000);
   setInterval(optimalLeverage, 12 * 60 * 60 * 1000);
 }
@@ -37,7 +38,7 @@ function keepBinanceFutAlive() {
   }, 1000*20);
 }
 
-// Track real time price of the coin and save them in an array, first price is the last
+// Track real time price of the coin and save them in an obj, first price is the last
 function binSocket() {
   const socket = new WebSocket('wss://fstream.binance.com/ws/!ticker@arr');
   socket.on('message', (data) => {
@@ -249,8 +250,8 @@ async function getOpenPositions() {
     const positions = response.data.filter(position => position.notional !== '0');
     return positions;
   } catch (e) {
-    console.error(e);
-    return e;
+    console.log(e.constructor.name, e.message, e.response.data);
+    return e.message
   }
 }
 
@@ -625,6 +626,7 @@ function formatMarketQuantity(quantity, symbolFilters) {
 module.exports = {
   loadFutureMarkets,
   getAllFutureSymbols,
+  getMarginBalance,
   createOrder,
   getOpenPositions,
   getOpenOrders,

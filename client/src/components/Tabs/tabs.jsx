@@ -51,8 +51,8 @@ const Tabs = () => {
       </div>
       <div className="content">
         {tabName === tabNames.Positions && <Positions />}
-        {tabName === tabNames.Orders && <Orders />}
-        {tabName === tabNames.Bags && <Bags />}
+        {tabName === tabNames.Orders && <Orders /> } 
+        {tabName === tabNames.Bags }
       </div>
     </div>
   );
