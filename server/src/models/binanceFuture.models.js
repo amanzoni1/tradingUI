@@ -18,7 +18,7 @@ async function loadFutureMarkets() {
   keepBinanceFutAlive();
   binSocket();
   setinfoObj();
-  optimalLeverage();
+  //optimalLeverage();
   setInterval(setinfoObj, 6 * 60 * 60 * 1000);
   setInterval(optimalLeverage, 12 * 60 * 60 * 1000);
 }
@@ -212,8 +212,12 @@ async function getMarginBalance() {
     const response = await axios.get(url, config);
     const accountData = response.data;
     const marginBalance = accountData.assets.find(asset => asset.asset === 'USDT').crossWalletBalance;
-    console.log('Margin Balance Available:', marginBalance);
-    return marginBalance;
+    const pnl = accountData.totalUnrealizedProfit;
+
+    //console.log('Margin Balance Available:', marginBalance);
+    //console.log('Current PNL:', pnl);
+
+    return { marginBalance, pnl };
   } catch (e) {
     console.error(e);
     return e;
