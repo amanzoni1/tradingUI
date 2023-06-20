@@ -18,7 +18,7 @@ async function loadFutureMarkets() {
   keepBinanceFutAlive();
   binSocket();
   setinfoObj();
-  //optimalLeverage();
+  optimalLeverage();
   setInterval(setinfoObj, 6 * 60 * 60 * 1000);
   setInterval(optimalLeverage, 12 * 60 * 60 * 1000);
 }
@@ -80,7 +80,8 @@ async function setinfoObj() {
 //Optimal leverage for all symbol
 async function optimalLeverage() {
   try {
-    const accountMarginBalance = await getMarginBalance();
+    const accountMarginBalanceTot = await getMarginBalance();
+    const accountMarginBalance = accountMarginBalanceTot.marginBalance;
     const response = await axios.get(`${baseURL}/fapi/v1/exchangeInfo`);
     const symbolsArr = response.data.symbols.filter(e => e.status === 'TRADING').map(e => e.symbol);
 
@@ -176,7 +177,7 @@ async function getAllFutureSymbols() {
   try {
     const response = await axios.get(`${baseURL}/fapi/v1/exchangeInfo`);
     const symbols = response.data.symbols
-      .filter(e => e.status === 'TRADING')
+      .filter(e => e.status === 'TRADING' && (e.symbol.endsWith('USDT') || e.symbol.endsWith('BUSD')))
       .map(e => e.symbol);
 
     const modifiedSymbols = symbols.map(e => {
@@ -254,7 +255,7 @@ async function getOpenPositions() {
     const positions = response.data.filter(position => position.notional !== '0');
     return positions;
   } catch (e) {
-    console.log(e.constructor.name, e.message, e.response.data);
+    console.log(e.constructor.name, e.message);
     return e.message
   }
 }

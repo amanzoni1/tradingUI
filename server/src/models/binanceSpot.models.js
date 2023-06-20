@@ -68,7 +68,7 @@ async function loop(symbol) {
   }   
 }*/
 
-
+/*
 function getAllSymbols() {
   let symbols = binance.symbols;
   let futSymbols = binanceFuture.symbols;
@@ -86,6 +86,42 @@ function getAllSymbols() {
 
   const renderSymbols = complete.map(opt => ({ label: opt, value: opt }));
   return renderSymbols; 
+}*/
+
+async function getAllSymbols() {
+  try {
+    const response = await axios.get(`${baseURL}/api/v3/exchangeInfo`);
+    const symbols = response.data.symbols
+      .filter(e => e.status === 'TRADING' && e.permissions.includes('SPOT') && (e.symbol.endsWith('USDT') || e.symbol.endsWith('BUSD')))
+      .map(e => e.symbol);
+
+    const responseF = await axios.get(`https://fapi.binance.com/fapi/v1/exchangeInfo`);
+    const futSymbols = responseF.data.symbols
+      .filter(e => e.status === 'TRADING' && (e.symbol.endsWith('USDT') || e.symbol.endsWith('BUSD')))
+      .map(e => e.symbol);
+
+    const complete = symbols.reduce(
+      (acc, item) => {
+        return acc.includes(item) ? acc : [...acc, item];
+      }, [...futSymbols]
+    );
+
+    const modifiedSymbols = complete.map(e => {
+      if (e.endsWith('USDT')) {
+        return e.slice(0, -4) + '/' + 'USDT';
+      } else if (e.endsWith('BUSD')) {
+        return e.slice(0, -4) + '/' + 'BUSD';
+      } else {
+        return e;
+      }
+    });
+
+    const renderSymbols = modifiedSymbols.map(e => ({ label: e, value: e }));
+    return renderSymbols;
+  } catch (e) {
+    console.error('getAllSymbols: ' + e);
+    return e;
+  }
 }
 
 

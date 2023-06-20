@@ -15,7 +15,7 @@ const useChartHistory = (selectedSymbol, interval) => {
       if ( interval === '1s') {
         const fetchChartHistory = async () => {
           try {
-            const symSpot = selectedSymbol ? selectedSymbol.label.replace(/[^a-z]/gi, '') : 'BTCUSDT';
+            const symSpot = selectedSymbol ? selectedSymbol.label.replace(/[^a-z0-9]/gi, '') : 'BTCUSDT';
             const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symSpot}&interval=${interval}`);
             const data = await response.json();
             setChartData(data); 
@@ -27,7 +27,7 @@ const useChartHistory = (selectedSymbol, interval) => {
       } else {
         const fetchChartHistory = async () => {
           try {
-            const symbFut = selectedSymbol ? selectedSymbol.label.replace(/[^a-z]/gi, '').toLowerCase() : 'btcusdt';
+            const symbFut = selectedSymbol ? selectedSymbol.label.replace(/[^a-z0-9]/gi, '').toLowerCase() : 'btcusdt';
             const response = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbFut}&interval=${interval}`);
             const data = await response.json();
             setChartData(data); 
@@ -40,7 +40,7 @@ const useChartHistory = (selectedSymbol, interval) => {
     } else {
       const fetchChartHistory = async () => {
         try {
-          const symSpot = selectedSymbol ? selectedSymbol.label.replace(/[^a-z]/gi, '') : 'BTCUSDT';
+          const symSpot = selectedSymbol ? selectedSymbol.label.replace(/[^a-z0-9]/gi, '') : 'BTCUSDT';
           const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symSpot}&interval=${interval}`);
           const data = await response.json();
           setChartData(data); 

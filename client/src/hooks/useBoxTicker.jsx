@@ -14,7 +14,7 @@ const useBoxTicker = (selectedSymbol) => {
 
   useEffect(() => {
     if (binApi === 'future') {
-      const symbSocket = selectedSymbol ? selectedSymbol.label.replace(/[^a-z]/gi, '').toLowerCase() : 'btcusdt';
+      const symbSocket = selectedSymbol ? selectedSymbol.label.replace(/[^a-z0-9]/gi, '').toLowerCase() : 'btcusdt';
       const fetchTickerData = async () => {
         try {
           const response = await fetch(`https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=${symbSocket}`);
@@ -44,7 +44,7 @@ const useBoxTicker = (selectedSymbol) => {
         try {
           const response = await fetch(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${symbSocket}`);
           const data = await response.json();
-          setOpenInterest(Number(data.openInterest).toLocaleString('en-US', {style: 'currency', currency: 'USD'}));
+          setOpenInterest(Number(data.openInterest).toLocaleString());
         } catch (error) {
           console.error(error);
         }

@@ -31,7 +31,7 @@ const AccountInfo = () => {
           <p className='p-accT'>Total:</p>
         </div>
         <div className='acc-info-value'>
-          <p className='p-acc'>{(1000).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+          <p className='p-acc'>{(0).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
           <p className='p-acc'>{Number(marginBalance).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
           <div>
             {pnl > 0 ? (

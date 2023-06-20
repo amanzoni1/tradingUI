@@ -24,7 +24,7 @@ const useChartUpdates = (selectedSymbol, interval) => {
   useEffect(() => {
     if (lastMessage) {
       const message = JSON.parse(lastMessage?.data);
-      const time = message.k.t / 1000 + 3600;
+      const time = message.k.t / 1000 + 7200;
       const value = Number(message.k.c);
 
       setLine({ time, value });
@@ -34,7 +34,7 @@ const useChartUpdates = (selectedSymbol, interval) => {
   useEffect(() => {
     if (lastMessage) {
       const message = JSON.parse(lastMessage?.data);
-      const time = message.k.t / 1000 + 3600;
+      const time = message.k.t / 1000 + 7200;
       const open = Number(message.k.o);
       const high = Number(message.k.h);
       const low = Number(message.k.l);
@@ -47,7 +47,7 @@ const useChartUpdates = (selectedSymbol, interval) => {
   useEffect(() => {
     if (lastMessage) {
       const message = JSON.parse(lastMessage?.data);
-      const time = message.k.t / 1000 + 3600;
+      const time = message.k.t / 1000 + 7200;
       const value = Number(message.k.q);
 
       setVolume({ time, value });

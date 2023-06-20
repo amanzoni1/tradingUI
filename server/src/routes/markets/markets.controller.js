@@ -3,8 +3,8 @@ const { getAllSymbols } = require('../../models/binanceSpot.models');
 
 
 
-function httpGetAllMarkets(req, res) {
-  return res.status(200).json(getAllSymbols());
+async function httpGetAllMarkets(req, res) {
+  return res.status(200).json(await getAllSymbols());
 }
 
 async function httpGetAllFutureMarkets(req, res) {

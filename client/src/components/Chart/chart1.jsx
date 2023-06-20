@@ -23,15 +23,15 @@ const ChartComponent = ({ selectedSymbol }) => {
   const [chart, setChart] = useState(null);
 
   const newChartDataCandle = useCallback(() => {
-    return chartData.map((cart) => ({ time: cart[0] / 1000 + 3600, open: Number(cart[1]), high: Number(cart[2]), low: Number(cart[3]), close: Number(cart[4]) }));
+    return chartData.map((cart) => ({ time: cart[0] / 1000 + 7200, open: Number(cart[1]), high: Number(cart[2]), low: Number(cart[3]), close: Number(cart[4]) }));
   }, [chartData]);
 
   const newVolData = useCallback(() => {
-    return chartData.map((cart) => ({ time: cart[0] / 1000 + 3600, value: Number(cart[7]) }));
+    return chartData.map((cart) => ({ time: cart[0] / 1000 + 7200, value: Number(cart[7]) }));
   }, [chartData]);
 
   const newChartData = useCallback(() => {
-    return chartData.map((cart) => ({ time: cart[0] / 1000 + 3600, value: Number(cart[4]) }));
+    return chartData.map((cart) => ({ time: cart[0] / 1000 + 7200, value: Number(cart[4]) }));
   }, [chartData]);
 
 
