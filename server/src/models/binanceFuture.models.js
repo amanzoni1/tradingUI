@@ -18,7 +18,7 @@ async function loadFutureMarkets() {
   keepBinanceFutAlive();
   binSocket();
   setinfoObj();
-  optimalLeverage();
+  //optimalLeverage();
   setInterval(setinfoObj, 6 * 60 * 60 * 1000);
   setInterval(optimalLeverage, 12 * 60 * 60 * 1000);
 }
@@ -116,7 +116,7 @@ async function optimalLeverage() {
       await setLeverage(symbol, maxL);
     }
   } catch (e) {
-    console.log(e);
+    console.log('optimal lev: ' + e);
     return e;
   }
 }
@@ -193,7 +193,7 @@ async function getAllFutureSymbols() {
     const renderSymbols = modifiedSymbols.map(e => ({ label: e, value: e }));
     return renderSymbols;
   } catch (e) {
-    console.error(e);
+    console.error('Error get all future symbols:', e);
     return e;
   }
 }
@@ -220,7 +220,7 @@ async function getMarginBalance() {
 
     return { marginBalance, pnl };
   } catch (e) {
-    console.error(e);
+    console.error('Error getting margin balance:', e.constructor.name, e.message);
     return e;
   }
 }
@@ -255,7 +255,7 @@ async function getOpenPositions() {
     const positions = response.data.filter(position => position.notional !== '0');
     return positions;
   } catch (e) {
-    console.log(e.constructor.name, e.message);
+    console.log('Error getting open positions:', e.constructor.name, e.message);
     return e.message
   }
 }
@@ -276,7 +276,7 @@ async function getOpenOrders(symbol) {
     const response = await axios.get(url, config);
     return response.data;
   } catch (e) {
-    console.error(e);
+    console.error('Error getting open orders:', e);
     return e;
   }
 }
@@ -296,7 +296,7 @@ async function queryOrders(symbol, orderId) {
     const response = await axios.get(url, config);
     return response.data;
   } catch (e) {
-    console.error(e);
+    console.error('Error querying orders:', e);
     return e;
   }
 }
@@ -317,7 +317,7 @@ async function deleteOrder(orderParams) {
     const response = await axios.delete(url, config);
     return response.data;
   } catch (e) {
-    console.error(e.response.data);
+    console.error('Error deleting the order:', e.response.data);
     return e;
   }
 }
@@ -365,7 +365,7 @@ async function createOrder(orderParams) {
 
     return response.data;
   } catch (e) {
-    console.log(e.constructor.name, e.message, e.response.data);
+    console.log('Error creating the order:', e.constructor.name, e.message, e.response.data);
     return e.message
   }
 }
@@ -408,7 +408,7 @@ async function closePosition(orderParams) {
 
     return closedPosition;
   } catch (e) {
-    console.log( e.message);
+    console.log( 'Error closing the position:', e.message);
     return e.message
   }
 }
@@ -433,7 +433,7 @@ async function closeMultipleOrders(orders) {
     const response = await axios.delete(url, { ...config, data });
     return response.data;
   } catch (e) {
-    console.error(e);
+    console.error('Error closing multiple positions:', e);
     return e;
   }
 }

@@ -1,16 +1,24 @@
 .switcher {
   position: absolute;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   cursor: pointer;
-  height: 24px;
+  height: auto;
   width: max-content;
-  margin-top: 28px;
-  margin-left: 18px;
-  padding: 4px;
+  margin-top: 12px;
+  margin-left: 14px;
+  padding: 2px;
   border: 1px solid grey;
   border-radius: 10px;
   z-index: 1000;
+}
+
+.switcher-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 2px 2px;
 }
 
 .switcher-item {
@@ -18,9 +26,8 @@
   font-size: 14px;
   font-weight: 500;
   color: white;
-  padding: 6px 7px;
-  margin: 2px;
-  border-radius: 6px;
+  padding: 6px 6px;
+  text-align: center;
 }
 
 .switcher-item:hover {
@@ -31,10 +38,10 @@
   color: #29f1ff;
 }
 
-.legend{
+.legend {
   position: absolute;
-  margin-top: 68px;
-  margin-left: 48px;
+  margin-top: 88px;
+  margin-left: 42px;
   font-size: 26px;
   font-weight: bold;
   z-index: 1000;

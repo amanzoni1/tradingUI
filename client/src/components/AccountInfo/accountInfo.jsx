@@ -3,12 +3,15 @@ import useAccountInfo from '../../hooks/useAccountInfo';
 import './accountInfo.css';
 
 const AccountInfo = () => {
-  const { marginBalance, pnl, isLoading, error, refetch } = useAccountInfo();
+  const { marginBalance, spotBalance, pnl, isLoading, error, refetchSpot, refetchFuture } = useAccountInfo();
   const [refreshInterval, setRefreshInterval] = useState(null);
-  const total = Number(marginBalance) + Number(pnl);
+  const total = Number(marginBalance) + Number(pnl) + Number(spotBalance);
 
   useEffect(() => {
-    const intervalId = setInterval(() => refetch(), 1000);
+    const intervalId = setInterval(() => {
+      refetchSpot();
+      refetchFuture();
+    }, 1000);
     setRefreshInterval(intervalId);
     return () => clearInterval(intervalId);
   }, []);
@@ -31,7 +34,7 @@ const AccountInfo = () => {
           <p className='p-accT'>Total:</p>
         </div>
         <div className='acc-info-value'>
-          <p className='p-acc'>{(0).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+          <p className='p-acc'>{Number(spotBalance).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
           <p className='p-acc'>{Number(marginBalance).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
           <div>
             {pnl > 0 ? (

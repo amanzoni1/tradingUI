@@ -2,42 +2,42 @@ import { useState, useEffect } from 'react';
 import { useGetRequest } from './requests';
 
 const useAccountInfo = () => {
+  const [spotBalance, setSpotBalance] = useState(null);
   const [marginBalance, setMarginBalance] = useState(null);
   const [pnl, setPnl] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { data, error: requestError, isLoading: requestIsLoading, mutate  } = useGetRequest('/account/future');
+  const { data: spotData, error: spotError, isLoading: spotIsLoading, mutate: mutateSpot } = useGetRequest('/account/spot');
+  const { data: futureData, error: futureError, isLoading: futureIsLoading, mutate: mutateFuture } = useGetRequest('/account/future');
 
   useEffect(() => {
-    if (data) {
-      const { marginBalance, pnl } = data;
+    if (spotData !== null) {
+      setSpotBalance(spotData); 
+    }
+    if (futureData) {
+      const { marginBalance, pnl } = futureData;
       setMarginBalance(marginBalance);
       setPnl(pnl);
-      setIsLoading(false);
     }
-  }, [data]);
+    setIsLoading(spotIsLoading || futureIsLoading);
+  }, [spotData, futureData, spotIsLoading, futureIsLoading]);
 
   useEffect(() => {
-    if (requestError) {
-      setError(requestError);
+    if (spotError || futureError) {
+      setError(spotError || futureError);
       setIsLoading(false);
     }
-  }, [requestError]);
-
-  useEffect(() => {
-    setIsLoading(requestIsLoading);
-  }, [requestIsLoading]);
+  }, [spotError, futureError]);
 
   return {
+    spotBalance,
     marginBalance,
     pnl,
     error,
     isLoading,
-    mutate,
-    refetch() {
-      return mutate();
-    },
+    refetchSpot: mutateSpot,
+    refetchFuture: mutateFuture,
   };
 };
 

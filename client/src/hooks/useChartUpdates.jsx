@@ -9,7 +9,7 @@ const useChartUpdates = (selectedSymbol, interval) => {
   const [candle, setCandle] = useState({});
   const [volume, setVolume] = useState({});
   const { data: futSymbols } = useFutureSymbols();
-  const symbSocket = selectedSymbol ? selectedSymbol.label.replace(/[^a-z]/gi, '').toLowerCase() : 'btcusdt';
+  const symbSocket = selectedSymbol ? selectedSymbol.label.replace(/[^a-z0-9]/gi, '').toLowerCase() : 'btcusdt';
 
   const isCoinExistInFutureSymbols = selectedSymbol ? futSymbols.find(e => e.label === selectedSymbol.label) : '';
   const binApi = (isCoinExistInFutureSymbols && interval != '1s') ? config.binanceFutSocket : config.binanceSocket;

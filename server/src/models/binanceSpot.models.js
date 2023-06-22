@@ -1,9 +1,12 @@
 const axios = require('axios');
 const ccxt = require ('ccxt');
+const crypto = require('crypto');
 require('dotenv').config();
 
 const baseURL = 'https://api.binance.com';
 const endpoint = '/api/v3/ping';
+const apiKey = process.env.BINANCE_API_KEY;
+const secretKey = process.env.BINANCE_SECRET_KEY;
 
 const binance = new ccxt.pro.binanceusdm({
   //'rateLimit': 1000,
@@ -124,6 +127,43 @@ async function getAllSymbols() {
   }
 }
 
+// USDT disponibili in spot
+async function getSpotBalance() {
+  try {
+    const timestamp = Date.now();
+    const url = `${baseURL}/api/v3/account`;
+    const params = { timestamp };
+    const signature = generateSignature(params);
+    const config = {
+      headers: { 'X-MBX-APIKEY': apiKey },
+      params: { ...params, signature },
+    };
+
+    const response = await axios.get(url, config);
+    const accountData = response.data;
+    const spotBalance = accountData.balances.find(asset => asset.asset === 'USDT').free;
+    return spotBalance;
+  } catch (e) {
+    console.error(e);
+    return e;
+  }
+}
+
+//Generate signature when needed
+function generateSignature(params) {
+  try {
+    const queryString = Object.keys(params)
+      .map((key) => `${key}=${params[key]}`)
+      .join('&');
+
+    const signature = crypto.createHmac('sha256', secretKey).update(queryString).digest('hex');
+    return signature;
+  } catch (e) {
+    console.error('Error generating signature:', e);
+    return e;
+  }
+}
+
 
 async function createSpotOrder(orderParams) {
   try{
@@ -237,6 +277,7 @@ module.exports = {
   getAllSymbols,
   createSpotOrder,
   getOpenBags,
-  sellTheBag
+  sellTheBag,
+  getSpotBalance
 };
 
