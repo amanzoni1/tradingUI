@@ -148,6 +148,31 @@ async function getAllSymbols() {
   }
 }
 
+//Get the spot symbols available for trading
+async function getTradingSymbol(rawSymbol) {
+  try {
+    const response = await axios.get(`${baseURL}/api/v3/exchangeInfo`);
+    const symbols = response.data.symbols
+      .filter(e => e.status === 'TRADING' && e.permissions.includes('SPOT') && (e.symbol.endsWith('USDT') || e.symbol.endsWith('BUSD')))
+      .map(e => e.symbol);
+
+    if (symbols.includes(rawSymbol + 'USDT')) {
+      return rawSymbol + 'USDT';
+    } 
+
+    else if (symbols.includes(rawSymbol + 'BUSD')) {
+      return rawSymbol + 'BUSD';
+    } 
+
+    else {
+      return null;
+    }
+  } catch (error) {
+    console.error(`Error getting trading symbol: ${error}`);
+    return null;
+  }
+}
+
 //get available fund
 async function getNonZeroSpotBalances() {
   try {
@@ -171,8 +196,20 @@ async function getNonZeroSpotBalances() {
       }))
       .filter(asset => asset.total > 0);
 
-    //console.log('Non-zero Spot Balances:', nonZeroSpotBalances);
-    return nonZeroSpotBalances;
+    const totalValue = nonZeroSpotBalances
+      .map(asset => {
+        let price = 1; // Default to 1 in case there's no price for the asset
+        const assetPriceData = priceObj[`${asset.asset}USDT`] || priceObj[`${asset.asset}BUSD`];
+        if (assetPriceData) {
+          price = assetPriceData.price[0];
+        }
+        return asset.total * price;
+      })
+      .reduce((a, b) => a + b, 0);
+
+    console.log('Non-zero Spot Balances:', nonZeroSpotBalances);
+    console.log('Total value of assets:', totalValue);
+    return { nonZeroSpotBalances, totalValue };
   } catch (e) {
     console.error(e);
     return e;
@@ -262,6 +299,26 @@ async function getMarginBalance() {
   }
 }
 
+// change fund from USDT to BUSD
+async function exchangeToBUSD(amountUSDT) {
+  const orderParams = {
+    symbol: 'BUSDUSDT',
+    side: 'BUY',
+    type: 'MARKET',
+    amount: amountUSDT,
+  };
+
+  try {
+    const order = await createSpotOrder(orderParams);
+    const convertedAmount = parseFloat(order.executedQty);
+
+    return convertedAmount;
+  } catch (e) {
+    console.log(e.constructor.name, e.message);
+    return e.message;
+  }
+}
+
 
 
 
@@ -273,17 +330,19 @@ async function getMarginBalance() {
 //Get all open bags
 async function getOpenBags() {
   try {
-    const nonZeroSpotBalances = await getNonZeroSpotBalances();
+    const { nonZeroSpotBalances } = await getNonZeroSpotBalances();
     const openBags = nonZeroSpotBalances
       .filter(asset => {
-        const symbol = asset.asset + (asset.asset === 'BUSD' ? '' : 'USDT');
-        const lastPrice = priceObj.hasOwnProperty(symbol) ? priceObj[symbol].price[0] : 0;
+        const symbolUSDT = asset.asset === 'USDT' ? asset.asset : asset.asset + 'USDT';
+        const symbolBUSD = asset.asset === 'BUSD' ? asset.asset : asset.asset + 'BUSD';
+        const lastPrice = priceObj.hasOwnProperty(symbolUSDT) ? priceObj[symbolUSDT].price[0] : (priceObj.hasOwnProperty(symbolBUSD) ? priceObj[symbolBUSD].price[0] : 0);
         const value = asset.total * lastPrice;
         return value >= 5;
       })
       .map(asset => {
-        const symbol = asset.asset + (asset.asset === 'BUSD' ? '' : 'USDT');
-        const lastPrice = priceObj.hasOwnProperty(symbol) ? priceObj[symbol].price[0] : 0;
+        const symbolUSDT = asset.asset === 'USDT' ? asset.asset : asset.asset + 'USDT';
+        const symbolBUSD = asset.asset === 'BUSD' ? asset.asset : asset.asset + 'BUSD';
+        const lastPrice = priceObj.hasOwnProperty(symbolUSDT) ? priceObj[symbolUSDT].price[0] : (priceObj.hasOwnProperty(symbolBUSD) ? priceObj[symbolBUSD].price[0] : 0);
         const value = (asset.total * lastPrice).toFixed(2);
         return { coin: asset.asset, quantity: asset.total, value };
       });
@@ -292,6 +351,28 @@ async function getOpenBags() {
     return openBags;
   } catch (e) {
     console.error('Error fetching open bags with value greater than 5 USDT:', e);
+    return e;
+  }
+}
+
+//Get all open orders or a specific symbol if given
+async function getOpenOrders(symbol) {
+  const timestamp = Date.now();
+  const url = `${baseURL}/api/v3/openOrders`;
+  const params = { timestamp };
+  if (symbol) { params.symbol = symbol }
+  const signature = generateSignature(params);
+  const config = {
+    headers: { 'X-MBX-APIKEY': apiKey },
+    params: { ...params, signature },
+  };
+
+  try {
+    const response = await axios.get(url, config);
+    console.log(response.data)
+    return response.data;
+  } catch (e) {
+    console.error('Error getting open orders:', e);
     return e;
   }
 }
@@ -316,6 +397,26 @@ async function queryOrders(symbol, orderId) {
   }
 }
 
+// query the status of a specific order
+async function cancelOrder(symbol, orderId) {
+  const timestamp = Date.now();
+  const url = `${baseURL}/api/v3/order`;
+  const params = { timestamp, symbol, orderId };
+  const signature = generateSignature(params);
+  const config = {
+    headers: { 'X-MBX-APIKEY': apiKey },
+    params: { ...params, signature },
+  };
+
+  try {
+    const response = await axios.delete(url, config);
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    return e;
+  }
+}
+
 
 
 
@@ -328,8 +429,13 @@ async function queryOrders(symbol, orderId) {
 
 //create orders
 async function createSpotOrder(orderParams) {
-  if (orderParams.amount) {
-    orderParams.amount = (await transferFunds('USDT', orderParams.amount)) * 0.98;
+  if (orderParams.amount && orderParams.symbol !== 'BUSDUSDT') {
+    orderParams.amount = (await transferFunds('USDT', orderParams.amount)) * 0.96;
+
+    if (orderParams.symbol.endsWith('BUSD')) {
+      const exchangedAmount = (await exchangeToBUSD(orderParams.amount)) * 0.96;
+      orderParams.amount = exchangedAmount;
+    }
   }
 
   const preparedParams = await prepareOrderParams(orderParams);
@@ -358,58 +464,68 @@ async function createSpotOrder(orderParams) {
 
     return response.data;
   } catch (e) {
-    console.log(e.constructor.name, e.message);
+    console.log(e.constructor.name, e.message, e.response.data);
     return e.message;
   }
 }
 
-//setTimeout(() => createSpotOrder( {symbol: 'BTCUSDT', amount: 100, type: 'LIMITUP', side: 'BUY'}), 20000)
+//setTimeout(() => createSpotOrder( {symbol: 'BTCUSDT', amount: 200, type: 'LIMITUP', side: 'BUY'}), 20000)
+
+
+
+
+
+
+
 
 // Close or reduce open Positions and adj SL
 async function sellTheBag(orderParams) {
-  const { symbol, type, sideClose, contracts, reduction } = orderParams;
-  const rawQuantity = contracts * reduction;
-  const params = { symbol, type, side: sideClose, quantity: rawQuantity };
-
   try {
-    const closedPosition = await createSpotOrder(params);
-    /*const orders = await getOpenOrders(symbol);
-    const stopMarketOrders = orders.filter(order => order.type === 'STOP_MARKET' && order.side === sideClose);
+    let { symbol, type, side, contracts, reduction } = orderParams;
+    const rawQuantity = contracts * reduction;
 
-    let newQuantity = 0;
-    let totalWeightedPrice = 0;
-
-    stopMarketOrders.forEach(order => {
-      const remainingQuantity = order.origQty - order.executedQty;
-      newQuantity += remainingQuantity;
-      totalWeightedPrice += order.stopPrice * remainingQuantity;
-    });
-
-    let weightedStopPrice = 0;
-    if (newQuantity > 0) {
-      weightedStopPrice = totalWeightedPrice / newQuantity;
+    const tradingSymbol = await getTradingSymbol(symbol);
+    if (!tradingSymbol) {
+      console.log(`The symbol ${symbol} is not available with USDT or BUSD.`);
     }
 
-    const newOrderParams = {
-      symbol: symbol,
-      type: 'STOP',
-      side: sideClose,
-      quantity: newQuantity - (newQuantity * reduction),
-      stopPrice: weightedStopPrice,
+    const params = { symbol: tradingSymbol, type, side, quantity: rawQuantity };
+    const preparedParams = await prepareOrderParams(params);
+    console.log(preparedParams)
+    const url = `${baseURL}/api/v3/order`;
+    const signature = generateSignature(preparedParams);
+    const config = {
+      headers: { 'X-MBX-APIKEY': apiKey },
+      params: { ...preparedParams, signature },
     };
 
-    if (stopMarketOrders.length > 0) { await closeMultipleOrders(stopMarketOrders) }
-    if(reduction !== 1) { await createOrder(newOrderParams) }
-*/
+    const closedPosition = await axios.post(url, null, config);
+    const orders = await getOpenOrders(tradingSymbol);
+    const stopMarketOrders = orders.filter(order => order.type === 'STOP_LOSS_LIMIT');
+    if(stopMarketOrders.length > 0) {
+      const newOrderParams = {
+        symbol: stopMarketOrders[0].symbol,
+        type: 'STOP',
+        side: stopMarketOrders[0].side,
+        price: stopMarketOrders[0].price,
+        stopPrice: stopMarketOrders[0].stopPrice,
+        quantity: rawQuantity, 
+    };
+    await cancelOrder(stopMarketOrders[0].symbol, stopMarketOrders[0].orderId);
+    await createSpotOrder(newOrderParams);
+    }
+
     return closedPosition;
   } catch (e) {
-    console.log( e.message);
-    return e.message
+      console.log(e.constructor.name, e.message, e.response.data);
+      return e.message;
   }
 }
 
+//setTimeout(() => sellTheBag( {symbol: 'BTC', type: 'LIMITUP', side: 'SELL', contracts: 0.0, reduction: 0.5}), 20000)
+//setTimeout(() => getOpenOrders('ETHUSDT'), 2000)
 
-
+ 
 
 
 
@@ -584,5 +700,5 @@ module.exports = {
   getSpotBalance,
   createSpotOrder,
   getOpenBags,
-  //sellTheBag
+  sellTheBag
 };
