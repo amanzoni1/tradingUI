@@ -2,7 +2,8 @@ const http = require('http');
 const app = require('./app');
 
 const { loadFutureMarkets } = require('./models/binanceFuture.models');
-const { loadSpotMarkets } = require('./models/binanceSpot.models');
+//const { loadSpotMarkets } = require('./models/binanceSpot.models');
+const { loadSpotMarkets } = require('./models/binanceSpotTry');
 
 const PORT = process.env.PORT || 8000;
 

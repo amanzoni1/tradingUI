@@ -1,5 +1,6 @@
 const { getMarginBalance } = require('../../models/binanceFuture.models');
-const { getSpotBalance } = require('../../models/binanceSpot.models');
+//const { getSpotBalance } = require('../../models/binanceSpot.models');
+const { getSpotBalance } = require('../../models/binanceSpotTry');
 
 
 async function httpGetSpotAccountInfo(req, res) {

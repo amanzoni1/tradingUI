@@ -23,7 +23,7 @@ async function loadSpotMarkets() {
   setInterval(setSpotInfoObj, 6 * 60 * 60 * 1000);
 }
 
-loadSpotMarkets()
+//loadSpotMarkets()
 
 
 
@@ -207,8 +207,8 @@ async function getNonZeroSpotBalances() {
       })
       .reduce((a, b) => a + b, 0);
 
-    console.log('Non-zero Spot Balances:', nonZeroSpotBalances);
-    console.log('Total value of assets:', totalValue);
+    //console.log('Non-zero Spot Balances:', nonZeroSpotBalances);
+    //console.log('Total value of assets:', totalValue);
     return { nonZeroSpotBalances, totalValue };
   } catch (e) {
     console.error(e);
@@ -231,7 +231,7 @@ async function getSpotBalance() {
     const response = await axios.get(url, config);
     const accountData = response.data;
     const spotBalance = accountData.balances.find(asset => asset.asset === 'USDT').free;
-    console.log('Spot Balance Available:', spotBalance);
+    //console.log('Spot Balance Available:', spotBalance);
     return spotBalance;
   } catch (e) {
     console.error(e);
@@ -347,7 +347,7 @@ async function getOpenBags() {
         return { coin: asset.asset, quantity: asset.total, value };
       });
 
-    console.log(`Open bags with value greater than 5 USDT:`, openBags);
+    //console.log(`Open bags with value greater than 5 USDT:`, openBags);
     return openBags;
   } catch (e) {
     console.error('Error fetching open bags with value greater than 5 USDT:', e);
