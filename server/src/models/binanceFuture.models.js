@@ -16,7 +16,7 @@ async function loadFutureMarkets() {
   console.log('future markets have been started!');
   
   keepBinanceFutAlive();
-  //binSocket();
+  binSocket();
   setinfoObj();
   //optimalLeverage();
   setInterval(setinfoObj, 6 * 60 * 60 * 1000);
