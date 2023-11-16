@@ -3,12 +3,14 @@ const WebSocket = require('ws');
 const crypto = require('crypto');
 const querystring = require('querystring');
 require('dotenv').config();
+require('events').EventEmitter.defaultMaxListeners = 15;
 
 const baseURL = 'https://fapi.binance.com';
 const apiKey = process.env.BINANCE_API_KEY;
 const secretKey = process.env.BINANCE_SECRET_KEY;
 const priceObj = {};
 const infoObj = {};
+let socket;
 
 
 // make everything start
@@ -18,7 +20,7 @@ async function loadFutureMarkets() {
   keepBinanceFutAlive();
   binSocket();
   setinfoObj();
-  //optimalLeverage();
+  optimalLeverage();
   setInterval(setinfoObj, 6 * 60 * 60 * 1000);
   setInterval(optimalLeverage, 12 * 60 * 60 * 1000);
 }
@@ -40,7 +42,15 @@ function keepBinanceFutAlive() {
 
 // Track real time price of the coin and save them in an obj, first price is the last
 function binSocket() {
-  const socket = new WebSocket('wss://fstream.binance.com/ws/!ticker@arr');
+
+  if (socket) {
+    socket.removeAllListeners('message');
+    socket.removeAllListeners('close');
+    socket.removeAllListeners('error');
+    socket.close();  
+  }
+
+  socket = new WebSocket('wss://fstream.binance.com/ws/!ticker@arr');
   socket.on('message', (data) => {
     const dataArray = JSON.parse(data);
     dataArray.forEach((priceData) => {
@@ -352,7 +362,7 @@ async function createOrder(orderParams) {
     const response = await axios.post(url, null, config);
     const order = await queryOrders(response.data.symbol, response.data.orderId);
 
-    if (orderParams.type === 'LIMITUP') {
+    if ((orderParams.type === 'LIMITUP' || orderParams.type === 'MARKET') && !orderParams.isClosingPosition) {
       const stopMarketOrderParams = {
         symbol: orderParams.symbol,
         type: 'STOP',
@@ -377,7 +387,7 @@ async function closePosition(orderParams) {
   const params = { symbol, type, side: sideClose, quantity: rawQuantity };
 
   try {
-    const closedPosition = await createOrder(params);
+    const closedPosition = await createOrder({ ...params, isClosingPosition: true });
     const orders = await getOpenOrders(symbol);
     const stopMarketOrders = orders.filter(order => order.type === 'STOP_MARKET' && order.side === sideClose);
 

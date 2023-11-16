@@ -1,5 +1,5 @@
-const ccxt = require ('ccxt');
-const binanceFuture = new ccxt.pro.binanceusdm({'options': { 'defaultType': 'future' }});
+//const ccxt = require ('ccxt');
+//const binanceFuture = new ccxt.pro.binanceusdm({'options': { 'defaultType': 'future' }});
 
 const { createOrder, getOpenOrders, deleteOrder } = require('../../models/binanceFuture.models');
 const { createSpotOrder } = require('../../models/binanceSpot.models');
