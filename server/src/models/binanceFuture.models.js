@@ -11,12 +11,13 @@ const secretKey = process.env.BINANCE_SECRET_KEY;
 const priceObj = {};
 const infoObj = {};
 let socket;
+let socketSinglePrice;
 
 
 // make everything start
-async function loadFutureMarkets() { 
+async function loadFutureMarkets() {
   console.log('future markets have been started!');
-  
+
   keepBinanceFutAlive();
   binSocket();
   setinfoObj();
@@ -37,7 +38,7 @@ function keepBinanceFutAlive() {
     } catch (e) {
       console.log('Error sending ping request:', e);
     }
-  }, 1000*20);
+  }, 1000 * 20);
 }
 
 // Track real time price of the coin and save them in an obj, first price is the last
@@ -47,7 +48,7 @@ function binSocket() {
     socket.removeAllListeners('message');
     socket.removeAllListeners('close');
     socket.removeAllListeners('error');
-    socket.close();  
+    socket.close();
   }
 
   socket = new WebSocket('wss://fstream.binance.com/ws/!ticker@arr');
@@ -59,7 +60,7 @@ function binSocket() {
       if (!priceObj.hasOwnProperty(symbol)) {
         priceObj[symbol] = { price: [price] };
       } else {
-        priceObj[symbol].price = priceObj[symbol].price.length < 20 ? [price, ...priceObj[symbol].price] : [price, ...priceObj[symbol].price.slice(0, -1)];
+        priceObj[symbol].price = priceObj[symbol].price.length < 60 ? [price, ...priceObj[symbol].price] : [price, ...priceObj[symbol].price.slice(0, -1)];
       }
     });
   });
@@ -69,9 +70,52 @@ function binSocket() {
   });
   socket.on('error', (e) => {
     console.log('WebSocket connection error: ' + e);
-    setTimeout(() => binSocket(), 1000);
   });
 }
+
+
+
+function setMarkPriceVariationStream(symbol) {
+  const streamName = `${symbol.toLowerCase()}@markPrice@1s`;
+  const wsUrl = `wss://fstream.binance.com/ws/${streamName}`;
+
+  if (socketSinglePrice) {
+    socketSinglePrice.removeAllListeners('message');
+    socketSinglePrice.removeAllListeners('close');
+    socketSinglePrice.removeAllListeners('error');
+    socketSinglePrice.close();
+  }
+
+  socketSinglePrice = new WebSocket(wsUrl);
+
+  // Ensure priceObj is initialized and has the initial price
+  if (!priceObj[symbol] || priceObj[symbol].price.length === 0) {
+    console.error(`Initial price for ${symbol} not found.`);
+    return;
+  }
+
+  const initialPrice = parseFloat(priceObj[symbol].price[0]);
+
+  socketSinglePrice.on('message', (data) => {
+    const priceData = JSON.parse(data);
+    const newPrice = parseFloat(priceData.p);
+    
+    const priceVariation = (((newPrice - initialPrice) / initialPrice) * 100).toFixed(2);
+    console.log(`Price: ${newPrice}, Initial Price: ${initialPrice}, Price variation for ${symbol}: ${priceVariation}%`);
+  });
+
+  socketSinglePrice.on('close', (code) => {
+    console.log(`WebSocket connection closed with code ${code}`);
+    setTimeout(() => setMarkPriceVariationStream(symbol), 1000);
+  });
+
+  socketSinglePrice.on('error', (e) => {
+    console.log('WebSocket connection error: ' + e);
+  });
+}
+
+
+
 
 //Create an object with the orders filters
 async function setinfoObj() {
@@ -414,11 +458,11 @@ async function closePosition(orderParams) {
     };
 
     if (stopMarketOrders.length > 0) { await closeMultipleOrders(stopMarketOrders) }
-    if(reduction !== 1) { await createOrder(newOrderParams) }
+    if (reduction !== 1) { await createOrder(newOrderParams) }
 
     return closedPosition;
   } catch (e) {
-    console.log( 'Error closing the position:', e.message);
+    console.log('Error closing the position:', e.message);
     return e.message
   }
 }
@@ -432,7 +476,7 @@ async function closeMultipleOrders(orders) {
   const url = `${baseURL}/fapi/v1/batchOrders`;
   const signature = generateSignature(params);
   const config = {
-    headers: { 
+    headers: {
       'X-MBX-APIKEY': apiKey,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
@@ -578,7 +622,7 @@ function formatQuantity(quantity, symbolFilters) {
 
   if (!lotSizeFilter) {
     console.error("LOT_SIZE filter not found for this symbol.");
-    return { formattedQuantity: quantity, ordersRequired: 1 }; 
+    return { formattedQuantity: quantity, ordersRequired: 1 };
   }
 
   const { minQty, maxQty, stepSize } = lotSizeFilter;
@@ -608,7 +652,7 @@ function formatMarketQuantity(quantity, symbolFilters) {
 
   if (!marketLotSizeFilter) {
     console.error("MARKET_LOT_SIZE filter not found for this symbol.");
-    return { formattedQuantity: quantity, ordersRequired: 1 }; 
+    return { formattedQuantity: quantity, ordersRequired: 1 };
   }
 
   const { minQty, maxQty, stepSize } = marketLotSizeFilter;
@@ -646,7 +690,8 @@ module.exports = {
   getOpenPositions,
   getOpenOrders,
   closePosition,
-  deleteOrder
+  deleteOrder,
+  setMarkPriceVariationStream
 };
 
 

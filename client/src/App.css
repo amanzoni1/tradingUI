@@ -1,6 +1,9 @@
 .App {
   font-family: 'Share Tech Mono', monospace;
   text-align: center;
+  display: flex;
+  flex-direction: row;
+  margin-top: 16px;
 }
 
 body {
@@ -9,23 +12,25 @@ body {
   font-family: 'Share Tech Mono', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  background: linear-gradient(to left, rgb(17, 17, 17) 0%, rgb(28, 28, 28) 100%);
+  text-align: center; 
+  /*background: linear-gradient(to left, rgb(17, 17, 17) 0%, rgb(28, 28, 28) 100%);*/
+  background: rgb(24, 24, 24);
 }
 
 p {
   margin: 0px;
 }
 
+
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 4px;
+  height: 4px;
   background-color: #1e1d1d;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #8bf0f8;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .mainview {
@@ -33,11 +38,27 @@ p {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 16px;
 }
 
 .optionside {
   width: 350px;
+  margin: 0px 6px 0px 2px;
+}
+
+.newsfeed {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  overflow-y: auto;
+  width: 420px;
+  height: 722px;
+  border: 1px solid rgb(56, 56, 56);
+  border-radius: 6px;
+  padding: 8px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  flex-grow: 0;
+  margin-right: 2px;
 }
 
 .options-tab {
@@ -57,7 +78,7 @@ p {
   border-radius: 6px;
   border-style: solid;
   border-color: rgb(56, 56, 56);
-  margin: 0px 6px 0px 2px;
+  margin: 0px 2px 0px 2px;
 }
 
 .contenitore {
@@ -180,8 +201,8 @@ p {
 .buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin-top: 22px;
-  margin-bottom: 4px;
+  margin-top: 18px;
+  margin-bottom: 8px;
   height: 82px;
 }
 
@@ -241,5 +262,5 @@ p {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 28px;
+  margin-top: 8px;
 }
