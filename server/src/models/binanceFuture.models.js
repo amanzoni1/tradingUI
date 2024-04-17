@@ -21,9 +21,9 @@ async function loadFutureMarkets() {
   keepBinanceFutAlive();
   binSocket();
   setinfoObj();
-  optimalLeverage();
+  //optimalLeverage();
   setInterval(setinfoObj, 6 * 60 * 60 * 1000);
-  setInterval(optimalLeverage, 12 * 60 * 60 * 1000);
+  //setInterval(optimalLeverage, 12 * 60 * 60 * 1000);
 }
 
 

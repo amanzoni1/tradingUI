@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import useMakeOrders from "../../hooks/useMakeOrders";
 import useFutureSymbols from '../../hooks/useFutureSymbols';
 import useNewsTerminal from '../../hooks/useNewsTerminal';
+import useNewsPhoneix from '../../hooks/useNewsPhoenix';
 import useNewsBwe from '../../hooks/useNewsBwe';
 import CoinPriceVariation from './CoinPriceVariation/coinPriceVariation';
+import HeaderOptions from './headerOptions/headerOptions';
 import './newsFeed.css';
 import arkhamImage from './img/arkham.png';
 import blogsImage from './img/blogs.png';
@@ -18,6 +20,10 @@ import upbitImage from './img/upbit.png';
 import terminalImage from './img/terminal.png';
 import usgovImage from './img/usgov.png';
 import pricealert from './img/pricealert.png';
+import audioPing from './audio/ping.mp3';
+import audioBonk from './audio/bonk.mp3';
+import audioQuack from './audio/quack.mp3';
+import audioSmb from './audio/smb.mp3';
 
 const defaultImages = {
   "arkham": arkhamImage,
@@ -35,6 +41,41 @@ const defaultImages = {
   "terminal": terminalImage,
   "price monitor": pricealert
 };
+
+const sourceSounds = {
+  "arkham": audioBonk,
+  "blogs": audioBonk,
+  "binance": audioBonk,
+  "binance en": audioBonk,
+  "bithumb": audioBonk,
+  "bloomberg": audioBonk,
+  "coinbase": audioBonk,
+  "leaderboard": audioQuack,
+  "proposals": audioBonk,
+  "scrapers": audioQuack,
+  "upbit": audioBonk,
+  "usgov": audioBonk,
+  "terminal": audioBonk,
+  "price monitor": audioPing,
+  "GCR (@GCRClassic)": audioSmb,
+  "GCR (@GiganticRebirth)": audioSmb,
+  "Tree (@Tree_of_Alpha)": audioSmb,
+  "Eugene Ng Ah Sio (@0xENAS)": audioSmb,
+  "Andrew Kang (@Rewkang)": audioSmb,
+  "smartestmoney.eth (@smartestmoney_)": audioSmb,
+  "DeFi^2 (@DefiSquared)": audioSmb,
+  "vitalik.eth (@VitalikButerin)": audioSmb,
+  "Saint Pump (@Saint_Pump)": audioSmb,
+  "Tree News (@News_Of_Alpha)": audioQuack,
+  "Phoenix » PhoenixNews.io (@PhoenixTrades_)": audioQuack,
+  "FulcrumNews (@FulcrumNews_)": audioQuack,
+  "Velo (@VeloData)": audioQuack,
+  "db (@tier10k)": audioQuack,
+  "zoomer (@zoomerfied)": audioQuack,
+  "Summers (@SummersThings)": audioQuack,
+  "default": audioPing
+};
+
 
 const specialSymbols = ["PEPE", "FLOKI", "BONK", "SATS", "RATS", "SHIB", "XEC"];
 
@@ -83,8 +124,39 @@ const NewsFeed = () => {
   const { data: futSymbols } = useFutureSymbols();
   const { messages: terminalMessages } = useNewsTerminal();
   const { messages: bweMessages } = useNewsBwe();
+  const { messages: phoenixMessages } = useNewsPhoneix();
+  const [mergedMessages, setMergedMessages] = useState([]);
+  const [audioEnabled, setAudioEnabled] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const notificationSound = useRef(new Audio(sourceSounds.default));
+
+  useEffect(() => {
+    notificationSound.current = new Audio(sourceSounds.default);
+  }, []);
 
 
+  // Audio button
+  const toggleAudio = () => {
+    if (audioEnabled) {
+      setAudioEnabled(false);
+      notificationSound.current.pause();
+      notificationSound.current.currentTime = 0;
+    } else {
+      notificationSound.current.play().then(() => {
+        setAudioEnabled(true);
+      }).catch(err => {
+        console.error("Audio play failed:", err);
+      });
+    }
+  };
+
+  // Filtered messages based on search keyword
+  const filteredMessages = mergedMessages.filter(message =>
+    message.title && message.title.toLowerCase().includes(searchKeyword.toLowerCase())
+  );
+
+
+  // Orders
   const handleLongClick = (coin) => {
     const isSpecialSymbol = specialSymbols.includes(coin);
     const symbolLabel = isSpecialSymbol ? `1000${coin}/USDT` : `${coin}/USDT`;
@@ -95,7 +167,6 @@ const NewsFeed = () => {
       createLongOrder(symbolObject, "LIMITUP", 30000, null, null);
     }
   };
-
 
   const handleShortClick = (coin) => {
     const isSpecialSymbol = specialSymbols.includes(coin);
@@ -109,12 +180,70 @@ const NewsFeed = () => {
   };
 
 
+  // Handle duplicats in feed
+  useEffect(() => {
+    const allMessages = [...terminalMessages, ...bweMessages, ...phoenixMessages];
+    const uniqueMessages = filterDuplicates(allMessages);
 
-  const mergedMessages = [...terminalMessages, ...bweMessages].sort((a, b) => {
-    return new Date(b.time) - new Date(a.time);
-  });
+    uniqueMessages.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+    setMergedMessages(uniqueMessages);
+
+    const newMessagesCount = uniqueMessages.length - mergedMessages.length;
+    const newMessages = uniqueMessages.slice(0, newMessagesCount);
+
+    // Process new messages for sound notifications
+    newMessages.forEach(message => {
+      if (message.source) {
+        const sourceSound = sourceSounds[message.source.toLowerCase()] || sourceSounds.default;
+        notificationSound.current.src = sourceSound;
+        if (audioEnabled) {
+          notificationSound.current.play().catch(err => console.error("Audio play failed:", err));
+        }
+      }
+    });
+  }, [terminalMessages, bweMessages, phoenixMessages, mergedMessages.length, audioEnabled]);
 
 
+  // Function to filter out duplicate messages based on a clean source and title
+  const filterDuplicates = (messages) => {
+    const seen = new Set();
+    return messages.filter(message => {
+      const cleanSourceName = cleanSource(message.source);
+      const cleanTitleText = cleanTitle(message.title);
+      const identifier = `${cleanSourceName}:${cleanTitleText}`;;
+      if (!seen.has(identifier)) {
+        seen.add(identifier);
+        return true;
+      }
+      return false;
+    });
+  };
+  // Function to clean the source from extra characters like Twitter handles
+  const cleanSource = (source) => {
+    return source?.replace(/\s*\(@.*?\)$/, "");
+  };
+  // Function to clean the title 
+  const cleanTitle = (title) => {
+
+    const urlRegex = /(https:\/\/t\.co\/|https:\/\/twitter\.com\/\S+\/status\/)[^\s\\]*(\\n)?/gi;
+    let cleanedTitle = title?.replace(urlRegex, '');
+
+    const quoteRegex = /\n?Quote \[/;
+    const quoteRegex2 = /\n?&gt;&gt;QUOTE/;
+    cleanedTitle = cleanedTitle?.split(new RegExp(quoteRegex, 's'))[0];
+    cleanedTitle = cleanedTitle?.split(new RegExp(quoteRegex2, 's'))[0];
+
+    cleanedTitle = cleanedTitle?.replace(/&amp;/g, '&');
+
+    cleanedTitle = cleanedTitle?.replace(/[\s]+/g, ' ').trim();
+    //console.log(cleanedTitle);
+
+    return cleanedTitle;
+  };
+
+
+  // Extract coins from messages
   const getCoinsFromMessage = (message) => {
     const coinsSet = new Set();
 
@@ -133,16 +262,20 @@ const NewsFeed = () => {
   };
 
 
+  // Format messages body
   const parseBody = (body) => {
     const urlRegex = /(https:\/\/t\.co\/|https:\/\/twitter\.com\/\S+\/status\/)[^\s\\]*(\\n)?/gi;
 
     let updatedBody = body?.replace(urlRegex, (match) => {
       return match.endsWith('\\n') ? '\n' : '';
     });
-
     updatedBody = updatedBody?.replace(/\\n/g, '\n');
 
-    let [mainPart, quotePart] = updatedBody?.split(/\n?Quote \[/) || [updatedBody, null];
+    const quoteSplitRegex = /\n?(Quote \[|&gt;&gt;QUOTE)/;
+    let parts = updatedBody?.split(new RegExp(quoteSplitRegex));
+
+    let mainPart = parts.length > 0 ? parts[0] : updatedBody;
+    let quotePart = parts.length > 2 ? parts[2] : null;
 
     mainPart = mainPart?.split('\n').map((line, index) => (
       <p key={index}>{line.trim() === '' ? '\u00A0' : line}</p>
@@ -151,10 +284,12 @@ const NewsFeed = () => {
     if (quotePart) {
       quotePart = quotePart.replace(urlRegex, '');
       quotePart = quotePart.replace(/\([^)]*\)/, '');
+      quotePart = quotePart?.replace(/&amp;/g, '&');
 
-      const authorMatch = quotePart.match(/^(\S+?)\]/);
-      const author = authorMatch ? authorMatch[1] : '';
-      quotePart = quotePart.substring(authorMatch[0].length);
+      const authorRegex = /@([a-zA-Z0-9_]+)(\]?)/;
+      const authorMatch = quotePart.match(authorRegex);
+      const author = authorMatch ? '@' + authorMatch[1] : '';
+      quotePart = authorMatch ? quotePart.substring(authorMatch.index + authorMatch[0].length) : quotePart;
 
       quotePart = quotePart.split('\n').map(line => line.replace(/^>\s?/, '').trim()).filter(line => line);
 
@@ -172,7 +307,7 @@ const NewsFeed = () => {
   };
 
 
-
+  // Format messages title
   const formatTitle = (title) => {
     const match = title?.match(/^(.*?)\s*(\(|@)/);
     return match ? match[1] : title;
@@ -187,6 +322,7 @@ const NewsFeed = () => {
     }
   };
 
+  // Get link of the messages
   const getLinkUrl = (message) => {
     return message.link || message.url;
   };
@@ -194,7 +330,8 @@ const NewsFeed = () => {
 
   return (
     <div className="news-feed">
-      {mergedMessages.map((message) => {
+      <HeaderOptions toggleAudio={toggleAudio} audioEnabled={audioEnabled} setSearchKeyword={setSearchKeyword} />
+      {filteredMessages.map((message) => {
         if (!message.title) {
           return null;
         }
