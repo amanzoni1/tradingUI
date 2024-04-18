@@ -1,50 +1,94 @@
 import { useState, useEffect } from 'react';
 import useNewsTerminal from '../../hooks/useNewsTerminal';
+import useNewsPhoenix from '../../hooks/useNewsPhoenix';
+import useNewsBwe from '../../hooks/useNewsBwe';
 import useSymbols from '../../hooks/useSymbols';
 import useSnackbar from '../../hooks/useSnackbar';
 
 const TradingPair = ({ selectSymbol }) => {
-  const { coins } = useNewsTerminal();
   const { data: symbols } = useSymbols();
+  const { messages: terminalMessages } = useNewsTerminal();
+  const { messages: bweMessages } = useNewsBwe();
+  const { messages: phoenixMessages } = useNewsPhoenix();
   const { openErrorSnackbar } = useSnackbar();
-  const [selectedCoins, setSelectedCoins] = useState([]);
-
+  const [coins, setCoins] = useState(['', '', '', '', '']);
+  const [mergedMessages, setMergedMessages] = useState([]);
 
   useEffect(() => {
-    setSelectedCoins(coins?.slice(0, 5));
-  }, [coins]);
+    const allMessages = [...terminalMessages, ...bweMessages, ...phoenixMessages];
+    const uniqueMessages = filterDuplicates(allMessages);
+    uniqueMessages.sort((a, b) => new Date(b.time) - new Date(a.time));
+    setMergedMessages(uniqueMessages);
+  }, [terminalMessages, bweMessages, phoenixMessages]);
 
-  const isCoinExistInSymbols = (coin) =>
-    symbols.find((symbol) => symbol.label === coin);
+  useEffect(() => {
+    const coinSet = new Set(mergedMessages.flatMap(message => getCoinsFromMessage(message)));
+    const newCoins = Array.from(coinSet).slice(0, 5);
+    setCoins(prev => {
+      const updatedCoins = newCoins.concat(prev.slice(newCoins.length)).slice(0, 5);
+      return updatedCoins;
+    });
+  }, [mergedMessages]);
 
-  const coinWithOthersQuoteCurr = (coin) => {
-    const newCoin = coin.replace(/USDT/gi, 'BUSD');
-    symbols.find((symbol) => symbol.label === newCoin);
-  }
+  const filterDuplicates = messages => {
+    const seen = new Set();
+    return messages.filter(message => {
+      const identifier = `${cleanSource(message.source)}:${cleanTitle(message.title)}`;
+      if (!seen.has(identifier)) {
+        seen.add(identifier);
+        return true;
+      }
+      return false;
+    });
+  };
 
-  
+  const cleanSource = source => {
+    return source ? source.replace(/\s*\(@.*?\)$/, "") : "";
+  };
+
+  const cleanTitle = title => {
+    if (!title) return "";
+    const urlRegex = /https?:\/\/\S+\b/gi;
+    return title.replace(urlRegex, '').replace(/&amp;/g, '&').replace(/[\s]+/g, ' ').trim();
+  };
+
+  const getCoinsFromMessage = (message) => {
+    const coinsSet = new Set();
+    if (message.coin) {
+      coinsSet.add(message.coin + '/USDT');
+    }
+    if (message.suggestions) {
+      message.suggestions.forEach(suggestion => {
+        if (suggestion.coin) {
+          coinsSet.add(suggestion.coin + '/USDT');
+        }
+      });
+    }
+
+    return Array.from(coinsSet);
+  };
+
+
+  const isCoinExistInSymbols = coin => symbols.some(symbol => symbol.label === coin);
 
   return (
     <div className="blocco-trading">
-      {selectedCoins?.map((coin, index) => {
-        return (
-          <button 
-            className="selection1"
-            id="symbol"
-            key={coin + index}
-            onClick={() => {
-              if (isCoinExistInSymbols(coin)) { 
-                return selectSymbol({ label: coin, value: coin }); 
-              } if (coinWithOthersQuoteCurr(coin)) { 
-                const newCoin = coin.replace(/USDT/gi, 'BUSD'); 
-                return selectSymbol({ label: newCoin, value: newCoin }); 
-              } else { openErrorSnackbar('This coin does not exist in your symbol selection'); }
-            }}
-          >
-            {coin.replace(/\/USDT|\/BUSD/gi, '')}
-          </button>
-        );
-      })}
+      {coins.map((coin, index) => (
+        <button
+          className="selection1"
+          id={`symbol-${index}`}
+          key={index}
+          onClick={() => {
+            if (isCoinExistInSymbols(coin)) {
+              selectSymbol({ label: coin, value: coin });
+            } else {
+              openErrorSnackbar('This coin does not exist in your symbol selection');
+            }
+          }}
+        >
+          {coin ? coin.replace('/USDT', '') : ''}
+        </button>
+      ))}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import useMakeOrders from "../../hooks/useMakeOrders";
+import useSymbols from '../../hooks/useSymbols';
 import useFutureSymbols from '../../hooks/useFutureSymbols';
 import useNewsTerminal from '../../hooks/useNewsTerminal';
 import useNewsPhoneix from '../../hooks/useNewsPhoenix';
@@ -25,6 +26,12 @@ import audioBonk from './audio/bonk.mp3';
 import audioQuack from './audio/quack.mp3';
 import audioSmb from './audio/smb.mp3';
 
+
+const highlightStyles = {
+  Bitcoin: "highlight-red",
+  Ethereum: "highlight-blue",
+  Ripple: "highlight-green",
+};
 const defaultImages = {
   "arkham": arkhamImage,
   "blogs": blogsImage,
@@ -77,8 +84,10 @@ const sourceSounds = {
   "default": audioPing
 };
 
-
 const specialSymbols = ["PEPE", "FLOKI", "BONK", "SATS", "RATS", "SHIB", "XEC"];
+
+const manualAdditions = ["Bitcoin", "ethereum"];
+const manualRemovals = ["FOR", "DATA", "ONE", "AI", "KEY", "PEOPLE", "FUN"];
 
 const MessageWithTimer = ({ message }) => {
   const [timeElapsed, setTimeElapsed] = useState(0);
@@ -122,6 +131,7 @@ const MessageWithTimer = ({ message }) => {
 
 const NewsFeed = () => {
   const { createLongOrder, createShortOrder } = useMakeOrders();
+  const { data: symbols } = useSymbols();
   const { data: futSymbols } = useFutureSymbols();
   const { messages: terminalMessages } = useNewsTerminal();
   const { messages: bweMessages } = useNewsBwe();
@@ -129,6 +139,7 @@ const NewsFeed = () => {
   const [mergedMessages, setMergedMessages] = useState([]);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [symbolSet, setSymbolSet] = useState(new Set());
   const notificationSound = useRef(new Audio(sourceSounds.default));
 
   useEffect(() => {
@@ -284,7 +295,7 @@ const NewsFeed = () => {
     let quotePart = parts.length > 2 ? parts[2] : null;
 
     mainPart = mainPart?.split('\n').map((line, index) => (
-      <p key={index}>{line.trim() === '' ? '\u00A0' : line}</p>
+      <p key={index}>{line.trim() === '' ? '\u00A0' : highlightKeywords(line)}</p>
     ));
 
     if (quotePart) {
@@ -297,7 +308,9 @@ const NewsFeed = () => {
       const author = authorMatch ? '@' + authorMatch[1] : '';
       quotePart = authorMatch ? quotePart.substring(authorMatch.index + authorMatch[0].length) : quotePart;
 
-      quotePart = quotePart.split('\n').map(line => line.replace(/^>\s?/, '').trim()).filter(line => line);
+      quotePart = quotePart.split('\n').map((line, index) => (
+        <p key={index}>{line.replace(/^>\s?/, '').trim() === '' ? '\u00A0' : highlightKeywords(line.replace(/^>\s?/, '').trim())}</p>
+      ));
 
       quotePart = (
         <div className="quote-section">
@@ -331,6 +344,42 @@ const NewsFeed = () => {
   // Get link of the messages
   const getLinkUrl = (message) => {
     return message.link || message.url;
+  };
+
+
+
+  useEffect(() => {
+    if (symbols && symbols.length > 0) {
+      const updatedSymbolSet = new Set(manualAdditions.map(symbol => symbol.toUpperCase()));
+
+      symbols.forEach(symbol => {
+        const baseSymbol = symbol.label.split('/USDT')[0].toUpperCase();
+        if (!manualRemovals.includes(baseSymbol)) {
+          updatedSymbolSet.add(baseSymbol);
+        }
+      });
+
+      setSymbolSet(updatedSymbolSet);
+    }
+  }, [symbols]);
+
+
+  const highlightKeywords = (text) => {
+    const words = text.split(/(\s+)/).filter(part => part.length > 0);
+
+    const highlightedText = words.map((part, index) => {
+      if (part.trim().length === 0) {
+        return part;
+      }
+
+      const cleanWord = part.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g, "").toUpperCase();
+      if (symbolSet.has(cleanWord)) {
+        return <span className="highlight-blue" key={index}>{part}</span>;
+      }
+      return part;
+    });
+
+    return <>{highlightedText}</>;
   };
 
 

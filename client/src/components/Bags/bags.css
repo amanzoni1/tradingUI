@@ -24,31 +24,34 @@
   table-layout: fixed;
 }
 
-.ordini {
+.bags-legend {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  font-size: 12px;
   border-radius: 6px;
-  font-size: 16px;
   color: rgb(170, 170, 170);
   padding-bottom: 8px;
   border-radius: 0px;
 }
 
-.container {
+.container-bags {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid rgb(56, 56, 56);
   padding-bottom: 2px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: rgb(255, 255, 255);
 }
 
+.bags-value {
+  color: rgb(14, 203, 129);
+}
 
 .close-button {
   color: white;
@@ -58,7 +61,6 @@
   border-style: solid;
   border-radius: 6px;
   border-color: rgb(56, 56, 56);
-  font-size: 12px;
   transition: opacity 0.15s;
   justify-self: center;
 }

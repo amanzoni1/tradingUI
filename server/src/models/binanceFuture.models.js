@@ -266,13 +266,15 @@ async function getMarginBalance() {
 
     const response = await axios.get(url, config);
     const accountData = response.data;
-    const marginBalance = accountData.assets.find(asset => asset.asset === 'USDT').crossWalletBalance;
+    //const marginBalance = accountData.assets.find(asset => asset.asset === 'USDT').crossWalletBalance;
+    const marginBalance = accountData.totalMarginBalance;
+    const totalInitialMargin = accountData.totalInitialMargin;
     const pnl = accountData.totalUnrealizedProfit;
 
     //console.log('Margin Balance Available:', marginBalance);
     //console.log('Current PNL:', pnl);
 
-    return { marginBalance, pnl };
+    return { marginBalance, pnl, totalInitialMargin };
   } catch (e) {
     console.error('Error getting margin balance:', e.constructor.name, e.message);
     return e;

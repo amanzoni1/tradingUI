@@ -28,9 +28,11 @@ const Bags =() => {
     }
   }, [bags, sortDirection]);
 
+
   const handleSort = () => {
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
   };
+
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -49,21 +51,21 @@ const Bags =() => {
       {bags ? ( 
       <table className='pos-table'>
         <thead className='header'>
-          <tr className='ordini'>
+          <tr className='bags-legend '>
             <th style={{ width: '20%'}}>Symbol</th>
-            <th onClick={handleSort} style={{ width: '20%'}} className='dir-button' >Quantity</th>
-            <th style={{ width: '20%'}}>Value</th>
-            <th style={{ width: '25%'}}>Reduce</th>
-            <th style={{ width: '15%'}}>Close</th>
+            <th style={{ width: '20%'}} className='dir-button' >Quantity</th>
+            <th style={{ width: '20%'}} onClick={handleSort} className='dir-button'>Value</th>
+            <th style={{ width: '20%'}}>Reduce</th>
+            <th style={{ width: '20%'}}>Close</th>
           </tr>
         </thead>
         <tbody>
           {bags.map((bag, index) => (
-            <tr key={index} className='container' >
+            <tr key={index} className='container-bags' >
               <td style={{ width: '20%'}}>{bag.coin}</td>
               <td style={{ width: '20%'}}>{bag.quantity}</td>
-              <td style={{ width: '20%'}}>{Number(bag.value).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
-              <td style={{ width: '25%'}} className="reduce-container">
+              <td style={{ width: '20%'}} className='bags-value'>{Number(bag.value).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
+              <td style={{ width: '20%'}} className="reduce-container">
                       <button
                         className="reduce-button"
                         onClick={() => sellBags(bag.coin, bag.quantity, config.smallReduce)}

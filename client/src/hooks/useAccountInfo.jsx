@@ -5,6 +5,7 @@ const useAccountInfo = () => {
   const [spotBalance, setSpotBalance] = useState(null);
   const [marginBalance, setMarginBalance] = useState(null);
   const [pnl, setPnl] = useState(null);
+  const [initialMargin, setInitialMargin] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -16,9 +17,10 @@ const useAccountInfo = () => {
       setSpotBalance(spotData); 
     }
     if (futureData) {
-      const { marginBalance, pnl } = futureData;
+      const { marginBalance, pnl, totalInitialMargin } = futureData;
       setMarginBalance(marginBalance);
       setPnl(pnl);
+      setInitialMargin(totalInitialMargin);
     }
     setIsLoading(spotIsLoading || futureIsLoading);
   }, [spotData, futureData, spotIsLoading, futureIsLoading]);
@@ -34,6 +36,7 @@ const useAccountInfo = () => {
     spotBalance,
     marginBalance,
     pnl,
+    initialMargin,
     error,
     isLoading,
     refetchSpot: mutateSpot,

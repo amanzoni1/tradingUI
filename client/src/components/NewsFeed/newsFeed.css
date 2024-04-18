@@ -186,3 +186,8 @@
   line-height: 1.5;
   font-size: 14px;
 }
+
+.highlight-blue {
+  color: #1fe0ee;
+  font-weight: bold; 
+}
