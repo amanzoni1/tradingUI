@@ -32,7 +32,7 @@ const useNewsBwe = () => {
 
         setMessages(prevMessages => {
           const newMessages = [parsedMessage, ...prevMessages];
-          return newMessages.slice(0, 50);
+          return newMessages;
         });
       } catch (e) {
         if (lastMessage?.data === 'pong') {

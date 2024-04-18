@@ -73,6 +73,7 @@ const sourceSounds = {
   "db (@tier10k)": audioQuack,
   "zoomer (@zoomerfied)": audioQuack,
   "Summers (@SummersThings)": audioQuack,
+  "Farside Investors (@FarsideUK)": audioQuack,
   "default": audioPing
 };
 
@@ -186,7 +187,6 @@ const NewsFeed = () => {
     const uniqueMessages = filterDuplicates(allMessages);
 
     uniqueMessages.sort((a, b) => new Date(b.time) - new Date(a.time));
-
     setMergedMessages(uniqueMessages);
 
     const newMessagesCount = uniqueMessages.length - mergedMessages.length;
@@ -195,7 +195,7 @@ const NewsFeed = () => {
     // Process new messages for sound notifications
     newMessages.forEach(message => {
       if (message.source) {
-        const sourceSound = sourceSounds[message.source.toLowerCase()] || sourceSounds.default;
+        const sourceSound = normalizedSourceSounds[message.source.toLowerCase()] || sourceSounds.default;
         notificationSound.current.src = sourceSound;
         if (audioEnabled) {
           notificationSound.current.play().catch(err => console.error("Audio play failed:", err));
@@ -203,6 +203,11 @@ const NewsFeed = () => {
       }
     });
   }, [terminalMessages, bweMessages, phoenixMessages, mergedMessages.length, audioEnabled]);
+
+  const normalizedSourceSounds = Object.keys(sourceSounds).reduce((acc, key) => {
+    acc[key.toLowerCase()] = sourceSounds[key];
+    return acc;
+  }, {});
 
 
   // Function to filter out duplicate messages based on a clean source and title
@@ -227,7 +232,10 @@ const NewsFeed = () => {
   const cleanTitle = (title) => {
 
     const urlRegex = /(https:\/\/t\.co\/|https:\/\/twitter\.com\/\S+\/status\/)[^\s\\]*(\\n)?/gi;
+    const specificUrlRegex = /https:\/\/twitter\.com\/\S+\.\.\./gi;
+
     let cleanedTitle = title?.replace(urlRegex, '');
+    cleanedTitle = title?.replace(specificUrlRegex, '');
 
     const quoteRegex = /\n?Quote \[/;
     const quoteRegex2 = /\n?&gt;&gt;QUOTE/;
@@ -235,9 +243,7 @@ const NewsFeed = () => {
     cleanedTitle = cleanedTitle?.split(new RegExp(quoteRegex2, 's'))[0];
 
     cleanedTitle = cleanedTitle?.replace(/&amp;/g, '&');
-
     cleanedTitle = cleanedTitle?.replace(/[\s]+/g, ' ').trim();
-    //console.log(cleanedTitle);
 
     return cleanedTitle;
   };
@@ -264,7 +270,7 @@ const NewsFeed = () => {
 
   // Format messages body
   const parseBody = (body) => {
-    const urlRegex = /(https:\/\/t\.co\/|https:\/\/twitter\.com\/\S+\/status\/)[^\s\\]*(\\n)?/gi;
+    const urlRegex = /(https:\/\/t\.co\/|https:\/\/twitter\.com\/\S+\/status\/)[^\s\\]*(\.\.\.)?(\s|$)/gi;
 
     let updatedBody = body?.replace(urlRegex, (match) => {
       return match.endsWith('\\n') ? '\n' : '';

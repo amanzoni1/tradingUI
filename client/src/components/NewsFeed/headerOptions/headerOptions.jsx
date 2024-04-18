@@ -1,8 +1,10 @@
 import React from 'react';
 import './headerOptions.css';
+import enableAudioImg from './img/volume.png';
+import disableAudioImg from './img/mute.png';
 
 const HeaderOptions = ({ toggleAudio, audioEnabled, setSearchKeyword }) => {
-  const buttonText = audioEnabled ? "Disable Audio" : "Enable Audio";
+  const audioImg = audioEnabled ? disableAudioImg : enableAudioImg;
   const handleSearchChange = (event) => {
     setSearchKeyword(event.target.value);
   };
@@ -18,8 +20,8 @@ const HeaderOptions = ({ toggleAudio, audioEnabled, setSearchKeyword }) => {
         />
       </div>
       <div className="enable-audio-container">
-        <button onClick={toggleAudio} className={`enable-audio-button ${audioEnabled ? 'enabled' : 'disabled'}`}>
-          {buttonText}
+      <button onClick={toggleAudio} className="enable-audio-button">
+          <img src={audioImg} alt={audioEnabled ? 'Disable Audio' : 'Enable Audio'} />
         </button>
       </div>
     </div>

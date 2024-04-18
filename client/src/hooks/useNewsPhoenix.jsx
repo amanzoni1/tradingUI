@@ -60,7 +60,7 @@ const useNewsPhoneix = () => {
             title: title,
           };
         }
-        setMessages(prevMessages => [parsedMessage, ...prevMessages].slice(0, 50));
+        setMessages(prevMessages => [parsedMessage, ...prevMessages]);
 
         const newCoins = getCoinsFromMessage(parsedMessage);
         setCoins(prevCoins => {

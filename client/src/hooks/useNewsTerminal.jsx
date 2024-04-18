@@ -41,7 +41,7 @@ const useNewsTerminal = () => {
         }
         setMessages(prevMessages => {
           const newMessages = [parsedMessage, ...prevMessages];
-          return newMessages.slice(0, 50);
+          return newMessages;
         });
         const newCoinsSet = new Set();
 

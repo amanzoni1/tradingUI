@@ -5,6 +5,7 @@ import useChartUpdates from '../../hooks/useChartUpdates';
 import useChartPositions from '../../hooks/useChartPositions';
 import useChartOrders from '../../hooks/useChartOrders';
 import Switcher from '../Switcher/switcher';
+import FearAndGreedIndex from '../FearAndGreedIndex/FearAndGreedIndex';
 import './chart.css';
 
 
@@ -252,6 +253,7 @@ const ChartComponent = ({ selectedSymbol }) => {
     <>
       <div className='main-graph-component'>
         <Switcher interval={interval || '1s'} setInterval={setInterval} selectedSymbol={selectedSymbol} />
+        <FearAndGreedIndex />
         <div ref={chartContainerRef} className="tv-lightweight-charts"/>
         <div className="tv-lightweight-charts-volume" />
       </div>
