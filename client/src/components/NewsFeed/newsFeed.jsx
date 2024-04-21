@@ -7,87 +7,11 @@ import useNewsPhoneix from '../../hooks/useNewsPhoenix';
 import useNewsBwe from '../../hooks/useNewsBwe';
 import CoinPriceVariation from './CoinPriceVariation/coinPriceVariation';
 import HeaderOptions from './headerOptions/headerOptions';
+import { defaultImages, sourceSounds, manualAdditions, manualRemovals, coinList } from './params';
 import './newsFeed.css';
-import arkhamImage from './img/arkham.png';
-import blogsImage from './img/blogs.png';
-import binanceImage from './img/binance.png';
-import bithumbImage from './img/bithumb.png';
-import bloombergImage from './img/bloomberg.png';
-import coinbaseImage from './img/coinbase.png';
-import leaderboardImage from './img/leaderboard.png';
-import proposalsImage from './img/proposals.png';
-import scrapersImage from './img/scrapers.png';
-import upbitImage from './img/upbit.png';
-import terminalImage from './img/terminal.png';
-import usgovImage from './img/usgov.png';
-import pricealert from './img/pricealert.png';
-import audioPing from './audio/ping.mp3';
-import audioBonk from './audio/bonk.mp3';
-import audioQuack from './audio/quack.mp3';
-import audioSmb from './audio/smb.mp3';
-
-
-const highlightStyles = {
-  Bitcoin: "highlight-red",
-  Ethereum: "highlight-blue",
-  Ripple: "highlight-green",
-};
-const defaultImages = {
-  "arkham": arkhamImage,
-  "blogs": blogsImage,
-  "binance": binanceImage,
-  "binance en": binanceImage,
-  "bithumb": bithumbImage,
-  "bloomberg": bloombergImage,
-  "coinbase": coinbaseImage,
-  "leaderboard": leaderboardImage,
-  "proposals": proposalsImage,
-  "scrapers": scrapersImage,
-  "upbit": upbitImage,
-  "usgov": usgovImage,
-  "terminal": terminalImage,
-  "price monitor": pricealert
-};
-
-const sourceSounds = {
-  "arkham": audioBonk,
-  "blogs": audioBonk,
-  "binance": audioBonk,
-  "binance en": audioBonk,
-  "bithumb": audioBonk,
-  "bloomberg": audioBonk,
-  "coinbase": audioBonk,
-  "leaderboard": audioQuack,
-  "proposals": audioBonk,
-  "scrapers": audioQuack,
-  "upbit": audioBonk,
-  "usgov": audioBonk,
-  "terminal": audioBonk,
-  "price monitor": audioPing,
-  "GCR (@GCRClassic)": audioSmb,
-  "GCR (@GiganticRebirth)": audioSmb,
-  "Tree (@Tree_of_Alpha)": audioSmb,
-  "Eugene Ng Ah Sio (@0xENAS)": audioSmb,
-  "Andrew Kang (@Rewkang)": audioSmb,
-  "smartestmoney.eth (@smartestmoney_)": audioSmb,
-  "DeFi^2 (@DefiSquared)": audioSmb,
-  "vitalik.eth (@VitalikButerin)": audioSmb,
-  "Saint Pump (@Saint_Pump)": audioSmb,
-  "Tree News (@News_Of_Alpha)": audioQuack,
-  "Phoenix » PhoenixNews.io (@PhoenixTrades_)": audioQuack,
-  "FulcrumNews (@FulcrumNews_)": audioQuack,
-  "Velo (@VeloData)": audioQuack,
-  "db (@tier10k)": audioQuack,
-  "zoomer (@zoomerfied)": audioQuack,
-  "Summers (@SummersThings)": audioQuack,
-  "Farside Investors (@FarsideUK)": audioQuack,
-  "default": audioPing
-};
 
 const specialSymbols = ["PEPE", "FLOKI", "BONK", "SATS", "RATS", "SHIB", "XEC"];
 
-const manualAdditions = ["Bitcoin", "ethereum"];
-const manualRemovals = ["FOR", "DATA", "ONE", "AI", "KEY", "PEOPLE", "FUN"];
 
 const MessageWithTimer = ({ message }) => {
   const [timeElapsed, setTimeElapsed] = useState(0);
@@ -349,18 +273,23 @@ const NewsFeed = () => {
 
 
   useEffect(() => {
+    const updatedSymbolSet = new Set(manualAdditions.map(symbol => symbol.toUpperCase()));
+    /*
+      coinList.forEach(coin => {
+        updatedSymbolSet.add(coin.symbol.toUpperCase());
+        updatedSymbolSet.add(coin.name.toUpperCase());
+      });
+    */
     if (symbols && symbols.length > 0) {
-      const updatedSymbolSet = new Set(manualAdditions.map(symbol => symbol.toUpperCase()));
-
       symbols.forEach(symbol => {
         const baseSymbol = symbol.label.split('/USDT')[0].toUpperCase();
         if (!manualRemovals.includes(baseSymbol)) {
           updatedSymbolSet.add(baseSymbol);
         }
       });
-
-      setSymbolSet(updatedSymbolSet);
     }
+
+    setSymbolSet(updatedSymbolSet);
   }, [symbols]);
 
 
